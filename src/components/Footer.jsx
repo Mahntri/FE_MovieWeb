@@ -16,7 +16,7 @@ const Footer = () => {
           {/* Logo phần footer */}
           <div className="flex items-center mb-6">
             <span className="text-green-500 text-3xl mr-2">
-              <Link to="/" className="hover:text-red-500">tMovies</Link>
+              <Link to="/" className="hover:text-red-500">MoiMovies</Link>
             </span>
           </div>
 

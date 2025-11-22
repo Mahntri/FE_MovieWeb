@@ -11,7 +11,7 @@ const RegisterPage = () => {
         // Ví dụ: gọi API để tạo tài khoản mới
         console.log('Username:', username);
         console.log('Password:', password);
-        alert('Chức năng đăng ký đang được phát triển!');
+        
     };
 
     return (

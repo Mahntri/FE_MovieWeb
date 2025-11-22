@@ -11,7 +11,7 @@ const LoginPage = () => {
         // Ví dụ: gọi API xác thực
         console.log('Username:', username);
         console.log('Password:', password);
-        alert('Chức năng đăng nhập đang được phát triển!');
+        
     };
 
     return (
