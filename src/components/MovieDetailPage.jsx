@@ -368,12 +368,62 @@ const MovieDetailPage = ({ type }) => {
                 </div>
             </div>
             <div className="space-y-4">
-                {comments.length > 0 ? (comments.map((cmt) => (<div key={cmt._id} className="bg-[#1a1a1a] p-4 rounded-lg flex gap-4 border-b border-gray-800 relative group"><div className="w-10 h-10 rounded-full overflow-hidden bg-gray-700 flex-shrink-0 mt-1"><img src={cmt.userId?.avatar || "https://via.placeholder.com/150"} alt="User" className="w-full h-full object-cover"/></div><div className="flex-1"><div className="flex items-center gap-3 mb-1"><span className="font-bold text-white text-sm">{cmt.userId?.fullName || "Unknown"}</span>{user && user._id === cmt.userId?.accountId && (<span className="text-[10px] bg-gray-700 text-gray-300 px-1.5 py-0.5 rounded border border-gray-600">You</span>)}</div><span className="text-xs text-gray-500 block mb-2">{new Date(cmt.createdAt).toLocaleString()}</span><p className="text-gray-300 text-sm leading-relaxed">{cmt.content}</p></div><div className="absolute top-4 right-4 flex gap-2">{user && (<>{( (cmt.userId && user._id === cmt.userId.accountId) || user.role === 'ADMIN' ) ? (<button onClick={() => handleDeleteComment(cmt._id)} className="bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white border border-red-600/50 px-3 py-1 rounded text-xs font-bold transition flex items-center gap-1" title="Xóa bình luận"><DeleteOutlined /> {user.role === 'ADMIN' && user._id !== cmt.userId?.accountId ? 'ADMIN DEL' : 'REMOVE'}</button>) : (<button onClick={() => handleReport(cmt._id)} className="text-gray-500 hover:text-yellow-500 transition p-2 bg-black/20 rounded-full hover:bg-black/50" title="Báo cáo vi phạm"><WarningOutlined style={{ fontSize: '18px' }} /></button>)}</>)}</div></div>))) : (<p className="text-center text-gray-500 italic py-4">No comments yet. Be the first!</p>)}
+                {comments.length > 0 ? (comments.map((cmt) => 
+                (<div key={cmt._id} 
+                    className="bg-[#1a1a1a] p-4 rounded-lg flex gap-4 border-b border-gray-800 relative group">
+                        <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-700 flex-shrink-0 mt-1">
+                            <img src={cmt.userId?.avatar || "https://animevietsub.show/statics/images/user-image.png"} 
+                            alt="User" 
+                            className="w-full h-full object-cover"/>
+                        </div>
+                        <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-1">
+                                <span 
+                                    className="font-bold text-white text-sm">{cmt.userId?.fullName || "Unknown"}
+                                </span>{user && user._id === cmt.userId?.accountId && (<span className="text-[10px] bg-gray-700 text-gray-300 px-1.5 py-0.5 rounded border border-gray-600">You</span>)}
+                            </div>
+                            <span 
+                                className="text-xs text-gray-500 block mb-2">{new Date(cmt.createdAt).toLocaleString()}
+                            </span>
+                            <p 
+                                className="text-gray-300 text-sm leading-relaxed">{cmt.content}
+                            </p>
+                        </div>
+                        <div className="absolute top-4 right-4 flex gap-2">{user && (<>{( (cmt.userId && user._id === cmt.userId.accountId) || user.role === 'ADMIN' ) ? (<button onClick={() => handleDeleteComment(cmt._id)} 
+                            className="bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white border border-red-600/50 px-3 py-1 rounded text-xs font-bold transition flex items-center gap-1" 
+                            title="Xóa bình luận">
+                                <DeleteOutlined /> 
+                            {user.role === 'ADMIN' && user._id !== cmt.userId?.accountId ? 'ADMIN DEL' : 'REMOVE'}</button>) : (<button onClick={() => handleReport(cmt._id)} 
+                            className="text-gray-500 hover:text-yellow-500 transition p-2 bg-black/20 rounded-full hover:bg-black/50" 
+                            title="Báo cáo vi phạm">
+                                <WarningOutlined style={{ fontSize: '18px' }} />
+                            </button>)}</>)}
+                        </div>
+                </div>))) : (<p className="text-center text-gray-500 italic py-4">No comments yet. Be the first!</p>)}
             </div>
         </div>
 
         {/* SIMILAR */}
-        <div className="mt-10"><h2 className="text-2xl font-semibold mb-6 border-l-4 border-red-500 pl-3">You May Also Like</h2><div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">{similar.slice(0, 5).map(item => (<div key={item.id} className="cursor-pointer group relative" onClick={() => navigate(`/${type}/${item.id}`)}><div className="relative rounded-lg overflow-hidden mb-2 aspect-[2/3]"><img src={item.poster_path ? `https://image.tmdb.org/t/p/w300${item.poster_path}` : 'https://via.placeholder.com/300x450'} className="w-full h-full object-cover transition duration-300 group-hover:scale-110 group-hover:brightness-50" alt={item.title || item.name}/><div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"><PlayCircleOutlined style={{ fontSize: 40, color: 'white' }} /></div></div><p className="text-sm font-semibold truncate text-gray-300 group-hover:text-red-500 transition">{item.title || item.name}</p></div>))}</div>{similar.length === 0 && (<p className="text-gray-500 italic">No similar movies found.</p>)}</div>
+        <div className="mt-10">
+            <h2 className="text-2xl font-semibold mb-6 border-l-4 border-red-500 pl-3">
+                You May Also Like
+            </h2>
+            <div 
+                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">{similar.slice(0, 5).map(item => 
+                (<div key={item.id} 
+                    className="cursor-pointer group relative" onClick={() => navigate(`/${type}/${item.id}`)}>
+                    <div className="relative rounded-lg overflow-hidden mb-2 aspect-[2/3]">
+                    <img src={item.poster_path ? `https://image.tmdb.org/t/p/w300${item.poster_path}` : 'https://via.placeholder.com/300x450'} 
+                    className="w-full h-full object-cover transition duration-300 group-hover:scale-110 group-hover:brightness-50" 
+                    alt={item.title || item.name}/>
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <PlayCircleOutlined style={{ fontSize: 40, color: 'white' }} />
+                        </div>
+                    </div>
+                    <p className="text-sm font-semibold truncate text-gray-300 group-hover:text-red-500 transition">{item.title || item.name}</p>
+                </div>))}
+            </div>{similar.length === 0 && (<p className="text-gray-500 italic">No similar movies found.</p>)}
+        </div>
 
       </div>
 

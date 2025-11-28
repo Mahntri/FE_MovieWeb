@@ -177,7 +177,7 @@ const Header = () => {
                         {user ? (
                             <div className="relative" ref={menuRef}>
                                 <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition" onClick={() => setShowUserMenu(!showUserMenu)}>
-                                    <img src={user.avatar || "https://via.placeholder.com/150"} className="w-9 h-9 rounded-full object-cover border-2 border-transparent hover:border-red-600 transition shadow-md"/>
+                                    <img src={user.avatar || "https://animevietsub.show/statics/images/user-image.png"} className="w-9 h-9 rounded-full object-cover border-2 border-transparent hover:border-red-600 transition shadow-md"/>
                                     <FaCaretDown className="text-white text-xs" />
                                 </div>
                                 {showUserMenu && (
