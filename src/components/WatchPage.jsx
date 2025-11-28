@@ -2,15 +2,12 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 const WatchPage = () => {
-  const { type, id } = useParams(); // Lấy type (movie/tv) và id từ URL
+  const { type, id } = useParams();
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Cuộn lên đầu trang khi vào
+    window.scrollTo(0, 0);
   }, [id]);
 
-  // Xác định nguồn phim (Nguồn tham khảo cho mục đích học tập)
-  // Nếu là movie: embed/movie/id
-  // Nếu là tv: embed/tv/id&s=1&e=1 (Mặc định mùa 1 tập 1)
   const embedUrl = type === 'movie' 
     ? `https://www.2embed.cc/embed/${id}`
     : `https://www.2embed.cc/embedtv/${id}&s=1&e=1`;
@@ -19,7 +16,7 @@ const WatchPage = () => {
     <div className="bg-gray-900 min-h-screen text-white pt-24 px-4 md:px-8 pb-10">
       <div className="max-w-screen-xl mx-auto">
         
-        {/* 1. MÀN HÌNH VIDEO (PLAYER) */}
+        {/* 1. MÀN HÌNH VIDEO */}
         <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-[0_0_50px_rgba(220,38,38,0.3)] border border-gray-800 mb-8">
           <iframe
             src={embedUrl}
@@ -31,18 +28,17 @@ const WatchPage = () => {
           ></iframe>
         </div>
 
-        {/* Thông báo nhỏ */}
+        {/* Thông báo */}
         <p className="text-center text-gray-500 text-sm mb-10 italic">
             Nếu phim không chạy, hãy thử đổi Server hoặc tắt chặn quảng cáo (Đây là nguồn phim demo).
         </p>
 
-        {/* 2. MỤC COMMENT (Giống trang chi tiết) */}
+        {/* 2. MỤC COMMENT */}
         <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl font-semibold mb-6 border-l-4 border-red-500 pl-3">
                 Comments <span className="text-gray-400 text-lg font-normal">(0)</span>
             </h2>
             
-            {/* Form viết comment giả lập */}
             <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
                 <div className="flex gap-4 mb-6">
                     <div className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center font-bold">

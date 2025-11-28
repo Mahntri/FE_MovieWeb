@@ -13,7 +13,7 @@ const Footer = () => {
         }}
       >
         <div className="max-w-screen-lg mx-auto flex flex-col items-center">
-          {/* Logo phần footer */}
+          {/* Logo */}
           <div className="flex items-center mb-6">
             <span className="text-green-500 text-3xl mr-2">
               <Link to="/" className="hover:text-red-500">MoiMovies</Link>

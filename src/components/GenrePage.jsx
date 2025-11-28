@@ -2,24 +2,35 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import tmdbApi from '../api/tmdbApi';
 import MovieCard from './MovieCard';
-import Pagination from './Pagination'; // 👈 Import Pagination
+import Pagination from './Pagination';
+import ListSkeleton from '../skeletons/ListSkeleton'; // 👈 Import
 
 const GenrePage = () => {
     const { id } = useParams();
-    const [movies, setMovies] = useState([]);
+    const [items, setItems] = useState([]);
     const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0); // 👈 Thêm state
+    const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [genreName, setGenreName] = useState('Movies');
+    const [genreName, setGenreName] = useState('Genre');
 
-    const fetchMovies = async (pageVal) => {
+    const fetchData = async (pageVal) => {
         setLoading(true);
         try {
-            const res = await tmdbApi.getMoviesByGenre(id, pageVal);
-            setMovies(res.results); // Thay thế list
-            setTotalPages(res.total_pages > 500 ? 500 : res.total_pages);
+            const [movieRes, tvRes] = await Promise.all([
+                tmdbApi.getMoviesByGenre(id, pageVal),
+                tmdbApi.getTVsByGenre(id, pageVal)
+            ]);
+
+            const movies = movieRes.results.map(m => ({ ...m, media_type: 'movie' }));
+            const tvs = tvRes.results.map(t => ({ ...t, media_type: 'tv' }));
+            const combined = [...movies, ...tvs].sort((a, b) => b.popularity - a.popularity);
+
+            setItems(combined);
+            const maxPage = Math.max(movieRes.total_pages, tvRes.total_pages);
+            setTotalPages(maxPage > 500 ? 500 : maxPage);
+
         } catch (error) {
-            console.error('Error fetching genre movies:', error);
+            console.error('Error fetching genre data:', error);
         }
         setLoading(false);
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -31,48 +42,48 @@ const GenrePage = () => {
                 const list = await tmdbApi.getGenres('movie');
                 const genre = list.find(g => g.id.toString() === id);
                 if (genre) setGenreName(genre.name);
-            } catch (err) {
-                console.error(err);
-            }
+            } catch (err) { console.error(err); }
         };
         getGenreName();
-        
-        setPage(1); // Reset về trang 1 khi đổi thể loại
-        // Fetch sẽ được gọi bởi useEffect phụ thuộc vào [id, page] bên dưới
+        setPage(1); 
     }, [id]);
 
     useEffect(() => {
-        fetchMovies(page);
+        fetchData(page);
     }, [id, page]);
 
+    // 👇 SKELETON
+    if (loading) return <ListSkeleton />;
+
     return (
-        <div className="text-white pt-24 px-6 max-w-screen-xl mx-auto">
+        <div className="text-white pt-24 px-4 md:px-8 max-w-screen-xl mx-auto min-h-screen">
             <h2 className="text-3xl font-bold text-center mb-8">
                 Genre: <span className="text-red-500">{genreName}</span>
             </h2>
 
-            {loading ? (
-                <div className="h-96 flex items-center justify-center">Loading...</div>
-            ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-6">
-                    {movies.map((movie) => (
+            {items.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                    {items.map((item) => (
                         <MovieCard
-                            key={movie.id}
-                            movie={movie.title}
-                            img={movie.poster_path}
-                            id={movie.id}
+                            key={item.id + item.media_type}
+                            movie={item.media_type === 'movie' ? (item.title || item.name) : null}
+                            tv={item.media_type === 'tv' ? (item.name || item.title) : null}
+                            img={item.poster_path}
+                            id={item.id}
                         />
                     ))}
                 </div>
+            ) : (
+                <div className="text-center text-gray-400 text-xl mt-20">
+                    No movies or TV shows found for this genre.
+                </div>
             )}
             
-            {/* 👇 Pagination 👇 */}
-            {!loading && movies.length > 0 && (
+            {!loading && items.length > 0 && (
                  <Pagination 
-                    currentPage={page} 
-                    totalPages={totalPages} 
-                    onPageChange={setPage} 
-                />
+                 currentPage={page} 
+                 totalPages={totalPages} 
+                 onPageChange={setPage} />
             )}
             <div className="pb-10"></div>
         </div>
