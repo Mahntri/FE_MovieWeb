@@ -6,7 +6,7 @@ import BannerSkeleton from '../components/skeletons/BannerSkeleton';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const HomePage = () => {
-  useDocumentTitle('MoiMovies - Xem phim chất lượng cao');
+  useDocumentTitle('MoiMovies - Xem phim trực tuyến - Phim chất lượng cao');
 
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);

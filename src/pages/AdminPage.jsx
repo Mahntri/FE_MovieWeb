@@ -20,6 +20,8 @@ const AdminPage = () => {
     const [videoReports, setVideoReports] = useState([]); // State cho báo lỗi phim
     const [currentPage, setCurrentPage] = useState(1);
 
+    useDocumentTitle('Admin Dashboard');
+
     useEffect(() => {
         if (user && user.role !== 'ADMIN') {
             alert("Bạn không có quyền truy cập trang này!");

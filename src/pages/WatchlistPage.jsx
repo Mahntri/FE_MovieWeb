@@ -4,6 +4,7 @@ import tmdbApi from '../api/tmdbApi';
 import { CloseCircleFilled, PlayCircleOutlined } from '@ant-design/icons';
 import ListSkeleton from '../components/skeletons/ListSkeleton'; 
 import Pagination from '../components/common/Pagination'; // Import Pagination
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const ITEMS_PER_PAGE = 20; // Quy định số phim mỗi trang
 
@@ -16,6 +17,8 @@ const WatchlistPage = () => {
     // Quản lý phân trang
     const [searchParams, setSearchParams] = useSearchParams();
     const page = parseInt(searchParams.get('page')) || 1;
+
+    useDocumentTitle('Tủ phim của tôi - MoiMovies');
     
     const fetchFavorites = async () => {
         setLoading(true);
