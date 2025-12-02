@@ -48,7 +48,7 @@ const MovieDetailPage = () => {
   useEffect(() => {
       const fetchComments = async () => {
           try {
-              const res = await fetch(`http://localhost:3000/api/comments/${type}/${id}?sort=${sortOrder}`);
+              const res = await fetch(`${API_BASE_URL}/api/comments/${type}/${id}?sort=${sortOrder}`);
               const data = await res.json();
               if (data.data) setComments(data.data);
           } catch (error) {
@@ -63,7 +63,7 @@ const MovieDetailPage = () => {
     const checkFavoriteStatus = async () => {
         if (!user) return;
         try {
-            const res = await fetch('http://localhost:3000/api/user/favorites', {
+            const res = await fetch(`${API_BASE_URL}/api/user/favorites`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const result = await res.json();
@@ -143,7 +143,7 @@ const MovieDetailPage = () => {
   const handleToggleFavorite = async () => {
       try {
           const favoriteKey = `${type}:${id}`;
-          const res = await fetch('http://localhost:3000/api/user/favorites', {
+          const res = await fetch(`${API_BASE_URL}/api/user/favorites`, {
               method: 'POST',
               headers: { 
                   'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ const MovieDetailPage = () => {
       if (!newComment.trim()) return;
       setCommentLoading(true);
       try {
-          const res = await fetch('http://localhost:3000/api/comments', {
+          const res = await fetch(`${API_BASE_URL}/api/comments`, {
               method: 'POST',
               headers: { 
                   'Content-Type': 'application/json',
@@ -193,7 +193,7 @@ const MovieDetailPage = () => {
   const handleReport = async (commentId) => {
         if(!window.confirm("Bạn có muốn báo cáo bình luận này vi phạm tiêu chuẩn cộng đồng?")) return;
         try {
-            const res = await fetch(`http://localhost:3000/api/comments/${commentId}/report`, {
+            const res = await fetch(`${API_BASE_URL}/api/comments/${commentId}/report`, {
                 method: 'PUT',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -206,7 +206,7 @@ const MovieDetailPage = () => {
   const handleDeleteComment = async (commentId) => {
     if (!window.confirm("Bạn chắc chắn muốn xóa bình luận này?")) return;
     try {
-        const res = await fetch(`http://localhost:3000/api/comments/${commentId}`, {
+        const res = await fetch(`${API_BASE_URL}/api/comments/${commentId}`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });

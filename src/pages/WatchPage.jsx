@@ -50,7 +50,7 @@ const WatchPage = () => {
 
             // Check Favorite
             if (user) {
-                const res = await fetch('http://localhost:3000/api/user/favorites', {
+                const res = await fetch(`${API_BASE_URL}/api/user/favorites`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const result = await res.json();
@@ -93,7 +93,7 @@ const WatchPage = () => {
     // Lấy Comment
     const fetchComments = async () => {
         try {
-            const res = await fetch(`http://localhost:3000/api/comments/${type}/${id}`);
+            const res = await fetch(`${API_BASE_URL}/api/comments/${type}/${id}`);
             const data = await res.json();
             if (data.data) setComments(data.data);
         } catch (e) { console.error(e); }
@@ -126,7 +126,7 @@ const WatchPage = () => {
   const handleToggleFavorite = async () => {
       try {
           const key = `${type}:${id}`;
-          const res = await fetch('http://localhost:3000/api/user/favorites', {
+          const res = await fetch(`${API_BASE_URL}/api/user/favorites`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
               body: JSON.stringify({ movieId: key })
@@ -146,7 +146,7 @@ const WatchPage = () => {
       if (!description) return;
 
       try {
-          const res = await fetch('http://localhost:3000/api/reports', {
+          const res = await fetch(`${API_BASE_URL}/api/reports`, {
               method: 'POST',
               headers: { 
                   'Content-Type': 'application/json', 
@@ -171,7 +171,7 @@ const WatchPage = () => {
       if (!newComment.trim()) return;
       setCommentLoading(true);
       try {
-          const res = await fetch('http://localhost:3000/api/comments', {
+          const res = await fetch(`${API_BASE_URL}/api/comments`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
               body: JSON.stringify({ content: newComment, mediaId: id.toString(), mediaType: type })

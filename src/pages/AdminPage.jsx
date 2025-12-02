@@ -32,17 +32,17 @@ const AdminPage = () => {
     const fetchData = async () => {
         try {
             // 1. Users
-            const resAccounts = await fetch('http://localhost:3000/api/admin/accounts', { headers: { 'Authorization': `Bearer ${token}` } });
+            const resAccounts = await fetch(`${API_BASE_URL}/api/admin/accounts`, { headers: { 'Authorization': `Bearer ${token}` } });
             const dataAccounts = await resAccounts.json();
             if (dataAccounts.data) setAccounts(dataAccounts.data);
 
             // 2. Reported Comments
-            const resReports = await fetch('http://localhost:3000/api/comments/admin/reported', { headers: { 'Authorization': `Bearer ${token}` } });
+            const resReports = await fetch(`${API_BASE_URL}/api/comments/admin/reported`, { headers: { 'Authorization': `Bearer ${token}` } });
             const dataReports = await resReports.json();
             if (dataReports.data) setReportedComments(dataReports.data);
 
             // 3. Video Reports (Mới)
-            const resVideoReports = await fetch('http://localhost:3000/api/reports/admin', { headers: { 'Authorization': `Bearer ${token}` } });
+            const resVideoReports = await fetch(`${API_BASE_URL}/api/reports/admin`, { headers: { 'Authorization': `Bearer ${token}` } });
             const dataVideoReports = await resVideoReports.json();
             if (dataVideoReports.data) setVideoReports(dataVideoReports.data);
 
@@ -54,21 +54,21 @@ const AdminPage = () => {
 
     const handleDeleteUser = async (id) => {
         if(!window.confirm("Xóa tài khoản này?")) return;
-        await fetch(`http://localhost:3000/api/admin/accounts/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+        await fetch(`${API_BASE_URL}/api/admin/accounts/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
         fetchData();
     };
     const handleDeleteComment = async (id) => {
         if(!window.confirm("Xóa bình luận này?")) return;
-        await fetch(`http://localhost:3000/api/comments/admin/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+        await fetch(`${API_BASE_URL}/api/comments/admin/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
         fetchData();
     };
     const handleDismissReport = async (id) => {
-        await fetch(`http://localhost:3000/api/comments/admin/${id}/dismiss`, { method: 'PUT', headers: { 'Authorization': `Bearer ${token}` } });
+        await fetch(`${API_BASE_URL}/api/comments/admin/${id}/dismiss`, { method: 'PUT', headers: { 'Authorization': `Bearer ${token}` } });
         fetchData();
     };
     const handleResolveVideo = async (id) => {
         if(!confirm("Xác nhận đã khắc phục lỗi này?")) return;
-        await fetch(`http://localhost:3000/api/reports/admin/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+        await fetch(`${API_BASE_URL}/api/reports/admin/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
         fetchData();
     };
 

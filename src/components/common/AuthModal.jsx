@@ -60,7 +60,7 @@ const AuthModal = () => {
         const endpoint = view === 'login' ? '/api/auth/login' : '/api/auth/register';
         
         try {
-            const res = await fetch(`http://localhost:3000${endpoint}`, {
+            const res = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -86,7 +86,7 @@ const AuthModal = () => {
         if(e) e.preventDefault();
         setError(''); setLoading(true);
         try {
-            const res = await fetch(`http://localhost:3000/api/auth/forgot-password`, {
+            const res = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: formData.email })
@@ -107,7 +107,7 @@ const AuthModal = () => {
         e.preventDefault();
         setError(''); setLoading(true);
         try {
-            const res = await fetch(`http://localhost:3000/api/auth/verify-otp`, {
+            const res = await fetch(`${API_BASE_URL}/api/auth/verify-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: formData.email, otp: formData.otp })
@@ -126,7 +126,7 @@ const AuthModal = () => {
         e.preventDefault();
         setError(''); setLoading(true);
         try {
-            const res = await fetch(`http://localhost:3000/api/auth/reset-password`, {
+            const res = await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 

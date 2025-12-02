@@ -25,7 +25,7 @@ const HeroWatchlistButton = ({ movieId }) => {
         const checkStatus = async () => {
             if (!user) return setIsAdded(false);
             try {
-                const res = await fetch('http://localhost:3000/api/user/favorites', {
+                const res = await fetch('${API_BASE_URL}/api/user/favorites', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await res.json();
@@ -41,7 +41,7 @@ const HeroWatchlistButton = ({ movieId }) => {
         if (!user) return openModal('login');
         try {
             const key = `${type}:${movieId}`;
-            const res = await fetch('http://localhost:3000/api/user/favorites', {
+            const res = await fetch(`${API_BASE_URL}/api/user/favorites`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',

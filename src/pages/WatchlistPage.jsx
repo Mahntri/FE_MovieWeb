@@ -23,7 +23,7 @@ const WatchlistPage = () => {
     const fetchFavorites = async () => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:3000/api/user/favorites', {
+            const res = await fetch(`${API_BASE_URL}/api/user/favorites`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (!res.ok) throw new Error("Lỗi kết nối server");
@@ -83,7 +83,7 @@ const WatchlistPage = () => {
     const removeMovie = async (originalId) => {
         if (!window.confirm("Xóa phim này khỏi Watchlist?")) return;
         try {
-            const res = await fetch('http://localhost:3000/api/user/favorites', {
+            const res = await fetch(`${API_BASE_URL}/api/user/favorites`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
