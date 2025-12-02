@@ -10,9 +10,9 @@ import {
 } from '@ant-design/icons';
 import { useAuth } from '../context/AuthContext';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import { API_BASE_URL } from '../../src/api/config';
 
 const MovieDetailPage = () => {
-  // Lấy cả type và id từ URL
   const { type, id } = useParams();
   
   const navigate = useNavigate();
@@ -33,18 +33,15 @@ const MovieDetailPage = () => {
   
   const [comments, setComments] = useState([]);
   
-  // 👇 STATE QUẢN LÝ SỐ LƯỢNG COMMENT HIỂN THỊ
   const [visibleComments, setVisibleComments] = useState(10);
   
   const [newComment, setNewComment] = useState('');
   const [commentLoading, setCommentLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState('desc');
 
-  // Dynamic Title
   const pageTitle = movie ? `${movie.title || movie.name} - MoiMovies` : 'Loading... | MoiMovies';
   useDocumentTitle(pageTitle);
 
-  // 1. Lấy danh sách comment (có sắp xếp)
   useEffect(() => {
       const fetchComments = async () => {
           try {
@@ -58,7 +55,6 @@ const MovieDetailPage = () => {
       fetchComments();
   }, [id, type, sortOrder]);
 
-  // 2. Kiểm tra yêu thích
   useEffect(() => {
     const checkFavoriteStatus = async () => {
         if (!user) return;
@@ -78,7 +74,6 @@ const MovieDetailPage = () => {
     checkFavoriteStatus();
   }, [id, type, user]);
 
-  // 3. Lấy thông tin chi tiết phim
   useEffect(() => {
     setMovie(null);
     setCasts([]);
@@ -220,10 +215,8 @@ const MovieDetailPage = () => {
     }
   };
 
-  // 👇 Logic cắt danh sách comment để hiển thị
   const currentComments = comments.slice(0, visibleComments);
   
-  // 👇 Hàm tải thêm
   const handleLoadMoreComments = () => {
       setVisibleComments(prev => prev + 10);
   };
@@ -323,7 +316,7 @@ const MovieDetailPage = () => {
                 <h2 className="text-2xl font-semibold border-l-4 border-red-500 pl-3">
                     Comments <span className="text-gray-400 text-lg font-normal">({comments.length})</span>
                 </h2>
-                {/* Dropdown Sắp xếp */}
+                {/* Dropdown */}
                 <div className="flex items-center gap-3">
                     <span className="text-gray-400 text-sm hidden sm:block">Sắp xếp theo:</span>
                     <select
@@ -366,7 +359,7 @@ const MovieDetailPage = () => {
                 </div>))) : (<p className="text-center text-gray-500 italic py-4">No comments yet. Be the first!</p>)}
             </div>
 
-            {/* 👇 NÚT TẢI THÊM (MỚI) 👇 */}
+            {/* NÚT TẢI THÊM */}
             {visibleComments < comments.length && (
                 <div className="mt-6">
                     <button 
@@ -379,7 +372,7 @@ const MovieDetailPage = () => {
             )}
         </div>
 
-        {/* SIMILAR (Giữ nguyên) */}
+        {/* SIMILAR */}
         <div className="mt-10"><h2 className="text-2xl font-semibold mb-6 border-l-4 border-red-500 pl-3">You May Also Like</h2><div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">{similar.slice(0, 5).map(item => (<div key={item.id} className="cursor-pointer group relative" onClick={() => navigate(`/${type}/${item.id}`)}><div className="relative rounded-lg overflow-hidden mb-2 aspect-[2/3]"><img src={item.poster_path ? `https://image.tmdb.org/t/p/w300${item.poster_path}` : 'https://via.placeholder.com/300x450'} className="w-full h-full object-cover transition duration-300 group-hover:scale-110 group-hover:brightness-50" alt={item.title || item.name}/><div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"><PlayCircleOutlined style={{ fontSize: 40, color: 'white' }} /></div></div><p className="text-sm font-semibold truncate text-gray-300 group-hover:text-red-500 transition">{item.title || item.name}</p></div>))}</div>{similar.length === 0 && (<p className="text-gray-500 italic">No similar movies found.</p>)}</div>
 
       </div>

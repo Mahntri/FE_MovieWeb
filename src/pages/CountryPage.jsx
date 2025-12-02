@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom'; // 1. Import useSearchParams
+import { useParams, useSearchParams } from 'react-router-dom';
 import tmdbApi from '../api/tmdbApi';
 import MovieCard from '../components/common/MovieCard';
 import Pagination from '../components/common/Pagination';
-import ListSkeleton from '../components/skeletons/ListSkeleton'; // 2. Import Skeleton
+import ListSkeleton from '../components/skeletons/ListSkeleton';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
-// Danh sách map mã code sang tên hiển thị cho đẹp
 const countryNames = {
     "VN": "Vietnam", "US": "United States", "KR": "Korea", 
     "JP": "Japan", "CN": "China", "TH": "Thailand", 
@@ -14,13 +13,12 @@ const countryNames = {
 };
 
 const CountryPage = () => {
-    const { id } = useParams(); // id ở đây là MÃ QUỐC GIA (ví dụ: US, VN)
+    const { id } = useParams();
     const [movies, setMovies] = useState([]);
 
     const countryName = countryNames[id] || id;
     useDocumentTitle(`Movies from ${countryName} - MoiMovies`);
     
-    // 3. Thay thế useState page bằng useSearchParams
     const [searchParams, setSearchParams] = useSearchParams();
     const page = parseInt(searchParams.get('page')) || 1;
 
@@ -40,18 +38,14 @@ const CountryPage = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // 4. Gọi data khi id hoặc page thay đổi
-    // (Không cần useEffect reset page về 1 nữa, URL sẽ tự lo việc đó)
     useEffect(() => {
         fetchMovies(page);
     }, [id, page]);
 
-    // 5. Hàm xử lý chuyển trang
     const handlePageChange = (newPage) => {
         setSearchParams({ page: newPage });
     };
 
-    // 6. Early return Skeleton
     if (loading) return <ListSkeleton />;
 
     return (

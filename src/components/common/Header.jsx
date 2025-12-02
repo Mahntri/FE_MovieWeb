@@ -78,7 +78,7 @@ const Header = () => {
             <div className={`fixed top-0 left-0 right-0 z-50 h-20 flex items-center transition-all duration-500 ease-in-out hidden md:flex ${isScrolled ? 'bg-black/95 shadow-xl' : 'bg-gradient-to-b from-black/90 via-black/60 to-transparent'}`}>
                 <div className="w-full max-w-screen-xl mx-auto flex justify-between items-center px-4 h-full">
                     
-                    {/* LEFT: LOGO + NAV */}
+                    {/* LOGO + NAV */}
                     <div className="flex items-center gap-12 h-full">
                         <Link to="/" className="flex items-center gap-2 group h-full">
                             <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-full object-cover group-hover:brightness-110 transition" />
@@ -93,7 +93,7 @@ const Header = () => {
                                 </li>
                             ))}
                             
-                            {/* Genres Dropdown */}
+                            {/* Genres */}
                             <li className="relative group h-full flex items-center cursor-pointer">
                                 <span className="flex items-center gap-1 text-sm font-bold uppercase tracking-wide text-gray-400 hover:text-white transition">Genres <FaCaretDown className="text-xs" /></span>
                                 <div className="absolute top-full left-0 pt-2 hidden group-hover:block w-[450px]">
@@ -103,7 +103,7 @@ const Header = () => {
                                 </div>
                             </li>
 
-                            {/* Country Dropdown */}
+                            {/* Country */}
                             <li className="relative group h-full flex items-center cursor-pointer">
                                 <span className="flex items-center gap-1 text-sm font-bold uppercase tracking-wide text-gray-400 hover:text-white transition">Country <FaCaretDown className="text-xs" /></span>
                                 <div className="absolute top-full left-0 pt-2 hidden group-hover:block w-[350px]">
@@ -113,7 +113,7 @@ const Header = () => {
                                 </div>
                             </li>
 
-                            {/* Year Dropdown */}
+                            {/* Year */}
                             <li className="relative group h-full flex items-center cursor-pointer">
                                 <span className="flex items-center gap-1 text-sm font-bold uppercase tracking-wide text-gray-400 hover:text-white transition">Year <FaCaretDown className="text-xs" /></span>
                                 <div className="absolute top-full left-0 pt-2 hidden group-hover:block w-[300px]">
@@ -125,7 +125,7 @@ const Header = () => {
                         </ul>
                     </div>
 
-                    {/* RIGHT: SEARCH + USER */}
+                    {/* SEARCH + USER */}
                     <div className="flex items-center gap-6">
                         {/* Search Bar */}
                         <div className="relative" ref={searchRef}>
@@ -177,7 +177,7 @@ const Header = () => {
                 </div>
             </div>
             
-            {/* MOBILE HEADER (Giữ nguyên) */}
+            {/* MOBILE HEADER */}
             <div className="md:hidden bg-black text-white py-4 border-b border-gray-700 fixed top-0 left-0 right-0 z-50 px-4 flex justify-between items-center">
                 <Link to="/" className="text-xl font-bold tracking-wide text-red-600">tMovies</Link>
                 <FaSearch className="text-lg" onClick={() => navigate('/movie')} />

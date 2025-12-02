@@ -1,7 +1,6 @@
 import React from 'react';
 import { DashboardOutlined, UserOutlined, WarningOutlined, BugOutlined } from '@ant-design/icons';
 
-// 👇 SỬA DÒNG NÀY: Thêm videoReportCount vào trong dấu ngoặc nhọn {}
 const AdminSidebar = ({ activeTab, setActiveTab, reportCount, videoReportCount }) => {
   return (
     <div className="w-64 bg-[#1a1a1a] border-r border-gray-800 flex-shrink-0 fixed h-full left-0 top-20 bottom-0 z-10">
@@ -41,7 +40,6 @@ const AdminSidebar = ({ activeTab, setActiveTab, reportCount, videoReportCount }
         >
             <BugOutlined className="text-lg" />
             <span className="font-semibold">Phim báo lỗi</span>
-            {/* 👇 Biến này gây lỗi nếu chưa khai báo ở trên */}
             {videoReportCount > 0 && (
                 <span className="ml-auto bg-yellow-600 text-white text-xs px-2 py-0.5 rounded-full">
                     {videoReportCount}

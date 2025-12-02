@@ -12,37 +12,33 @@ import {
     MessageOutlined,
     ExclamationCircleOutlined 
 } from '@ant-design/icons';
+import { API_BASE_URL } from '../../src/api/config';
 
 const WatchPage = () => {
   const { type, id } = useParams();
   const { user, openModal } = useAuth();
   const token = localStorage.getItem('token');
 
-  // Refs
   const commentSectionRef = useRef(null);
 
-  // State Video & Movie Info
-  const [movieInfo, setMovieInfo] = useState(null); // Lưu tên phim
+  const [movieInfo, setMovieInfo] = useState(null);
   const [embedUrl, setEmbedUrl] = useState(''); 
   const [episodes, setEpisodes] = useState([]); 
   const [currentEpSlug, setCurrentEpSlug] = useState(''); 
   const [serverName, setServerName] = useState(''); 
   const [isBackup, setIsBackup] = useState(false);
 
-  // State Actions
   const [isFavorite, setIsFavorite] = useState(false);
 
-  // State Comment
   const [comments, setComments] = useState([]);
-  const [visibleComments, setVisibleComments] = useState(10); // Số comment hiển thị
+  const [visibleComments, setVisibleComments] = useState(10);
   const [newComment, setNewComment] = useState('');
   const [commentLoading, setCommentLoading] = useState(false);
 
-  // 1. Fetch Dữ liệu
   useEffect(() => {
     window.scrollTo(0, 0);
     
-    // Lấy thông tin phim (Title) và trạng thái yêu thích
+    // Lấy thông tin phim và trạng thái yêu thích
     const fetchMovieInfo = async () => {
         try {
             const info = await tmdbApi.getDetail(type, id);
@@ -103,7 +99,7 @@ const WatchPage = () => {
     fetchMovieSource();
     fetchComments();
 
-  }, [type, id, user]); // Thêm user vào dep để check favorite lại khi login
+  }, [type, id, user]);
 
   // --- CÁC HÀM XỬ LÝ ---
 
@@ -195,12 +191,12 @@ const WatchPage = () => {
     <div className="bg-gray-900 min-h-screen text-white pt-24 px-4 md:px-8 pb-10">
       <div className="max-w-screen-xl mx-auto">
         
-        {/* 0. TIÊU ĐỀ PHIM (MỚI) */}
+        {/* TIÊU ĐỀ PHIM */}
         <h1 className="text-2xl md:text-3xl font-bold mb-4 text-white">
             {movieInfo ? (movieInfo.title || movieInfo.name) : "Loading..."}
         </h1>
 
-        {/* 1. MÀN HÌNH VIDEO */}
+        {/* MÀN HÌNH VIDEO */}
         <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-[0_0_50px_rgba(220,38,38,0.3)] border border-gray-800 mb-4">
           {embedUrl ? (
               <iframe src={embedUrl} title="Movie Player" className="w-full h-full" frameBorder="0" allowFullScreen allow="autoplay; encrypted-media"></iframe>
@@ -209,7 +205,7 @@ const WatchPage = () => {
           )}
         </div>
 
-        {/* 2. THANH CÔNG CỤ (ACTION BAR - MỚI) */}
+        {/* THANH CÔNG CỤ */}
         <div className="flex flex-wrap items-center gap-4 mb-8 bg-[#1f1f1f] p-4 rounded-xl border border-gray-700">
             <button 
                 onClick={handleNextEpisode}
@@ -250,7 +246,7 @@ const WatchPage = () => {
             </div>
         )}
 
-        {/* 3. DANH SÁCH TẬP PHIM (Luôn hiện nếu có data) */}
+        {/* DANH SÁCH TẬP PHIM */}
         {episodes.length > 0 && (
             <div className="mb-10 bg-[#1f1f1f] p-6 rounded-xl border border-gray-700">
                 <h3 className="text-lg font-bold mb-4 text-gray-300 border-b border-gray-700 pb-2">
@@ -267,7 +263,6 @@ const WatchPage = () => {
                                     : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
                                 }`}
                         >
-                            {/* Nếu chỉ có 1 tập -> Hiện chữ Full */}
                             {episodes.length === 1 ? "Full" : ep.name}
                         </button>
                     ))}
@@ -275,14 +270,13 @@ const WatchPage = () => {
             </div>
         )}
 
-        {/* 4. MỤC COMMENT (Có phân trang) */}
+        {/* MỤC COMMENT */}
         <div className="max-w-4xl mx-auto" ref={commentSectionRef}>
             <h2 className="text-2xl font-semibold mb-6 border-l-4 border-red-500 pl-3">
                 Comments <span className="text-gray-400 text-lg font-normal">({comments.length})</span>
             </h2>
             
             <div className="bg-[#1f1f1f] p-6 rounded-xl border border-gray-700 mb-8">
-                {/* ... (Form nhập liệu giữ nguyên) ... */}
                 <div className="flex gap-4">
                     <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-700 flex-shrink-0">
                         {user?.avatar ? <img src={user.avatar} className="w-full h-full object-cover"/> : <UserOutlined className="text-white text-xl flex justify-center items-center h-full" />}
@@ -303,7 +297,7 @@ const WatchPage = () => {
                 </div>
             </div>
 
-            {/* Danh sách Comment (Đã cắt theo visibleComments) */}
+            {/* Danh sách Comment */}
             <div className="space-y-4">
                 {currentComments.length > 0 ? currentComments.map(cmt => (
                     <div key={cmt._id} className="bg-[#1a1a1a] p-4 rounded-lg flex gap-4 border-b border-gray-800">

@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom'; // 1. Import useSearchParams
+import { useParams, useSearchParams } from 'react-router-dom';
 import tmdbApi from '../api/tmdbApi';
 import MovieCard from '../components/common/MovieCard'; 
 import Pagination from '../components/common/Pagination';
-import ListSkeleton from '../components/skeletons/ListSkeleton'; // 2. Import Skeleton
+import ListSkeleton from '../components/skeletons/ListSkeleton';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const YearPage = () => {
-    const { id } = useParams(); // id ở đây chính là NĂM (ví dụ: 2023)
+    const { id } = useParams();
     const [movies, setMovies] = useState([]);
 
     useDocumentTitle(`Movies from ${id} - MoiMovies`);
     
-    // 3. Thay thế useState page bằng useSearchParams
     const [searchParams, setSearchParams] = useSearchParams();
     const page = parseInt(searchParams.get('page')) || 1;
 
@@ -32,17 +31,14 @@ const YearPage = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // 4. Gọi data khi id hoặc page thay đổi
     useEffect(() => {
         fetchMovies(page);
     }, [id, page]);
 
-    // 5. Hàm xử lý chuyển trang
     const handlePageChange = (newPage) => {
         setSearchParams({ page: newPage });
     };
 
-    // 6. Early return Skeleton
     if (loading) return <ListSkeleton />;
 
     return (

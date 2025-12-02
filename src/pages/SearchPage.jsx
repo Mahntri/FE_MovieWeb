@@ -12,7 +12,6 @@ const SearchPage = () => {
 
     useDocumentTitle(`Kết quả tìm kiếm ${keyword} - MoiMovies`);
     
-    // 2. Thay thế useState page bằng useSearchParams
     const [searchParams, setSearchParams] = useSearchParams();
     const page = parseInt(searchParams.get('page')) || 1;
 
@@ -35,17 +34,14 @@ const SearchPage = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // 3. Gọi data khi keyword hoặc page thay đổi
     useEffect(() => {
         fetchMovies(page);
     }, [keyword, page]);
 
-    // 4. Hàm xử lý chuyển trang
     const handlePageChange = (newPage) => {
         setSearchParams({ page: newPage });
     };
 
-    // 5. Early return Skeleton
     if (loading) return <ListSkeleton />;
 
     return (
@@ -59,7 +55,6 @@ const SearchPage = () => {
                     {movies.map((item) => (
                         <MovieCard
                             key={`${item.id}-${item.media_type}`}
-                            // Truyền đúng props media_type để link hoạt động đúng
                             movie={item.media_type === 'movie' ? (item.title || item.name) : null}
                             tv={item.media_type === 'tv' ? (item.name || item.title) : null}
                             img={item.poster_path}
@@ -77,7 +72,7 @@ const SearchPage = () => {
                  <Pagination 
                     currentPage={page} 
                     totalPages={totalPages} 
-                    onPageChange={handlePageChange} // 6. Dùng hàm handlePageChange
+                    onPageChange={handlePageChange}
                 />
             )}
             <div className="pb-10"></div>

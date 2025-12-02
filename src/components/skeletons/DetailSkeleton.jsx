@@ -25,7 +25,7 @@ const DetailSkeleton = () => {
               <Skeleton className="h-8 w-24 rounded-full" />
             </div>
 
-            {/* Overview (3 dòng) */}
+            {/* Overview */}
             <div className="space-y-2 mb-8">
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-full" />
@@ -44,7 +44,6 @@ const DetailSkeleton = () => {
       {/* 2. BODY CONTENT SKELETON */}
       <div className="max-w-screen-xl mx-auto px-6 mt-10 space-y-16">
         
-        {/* Info Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 bg-[#1f1f1f] p-6 rounded-xl border border-gray-800">
             <div className="flex gap-4">
                 <Skeleton className="w-12 h-12 rounded-full" />
@@ -60,7 +59,7 @@ const DetailSkeleton = () => {
             </div>
         </div>
 
-        {/* Casts Row */}
+        {/* Casts */}
         <div>
             <Skeleton className="h-8 w-40 mb-6" /> {/* Title */}
             <div className="flex gap-4 overflow-hidden">

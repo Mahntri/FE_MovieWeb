@@ -35,12 +35,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   return (
     <div className="flex flex-col md:flex-row items-center justify-center gap-4 mt-10 mb-10 select-none">
       
-      {/* 1. Hiển thị thông tin trang */}
+      {/* Hiển thị thông tin trang */}
       <div className="bg-gray-900 text-gray-400 font-semibold px-4 py-2 rounded-md border border-gray-700">
         Trang <span className="text-white font-bold">{currentPage}</span> của <span className="text-white font-bold">{totalPages}</span>
       </div>
 
-      {/* 2. Các nút điều hướng */}
+      {/* Các nút điều hướng */}
       <div className="flex items-center gap-1">
         
         {/* Nút TRANG ĐẦU*/}

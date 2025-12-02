@@ -13,10 +13,8 @@ const MovieList = () => {
 
   useDocumentTitle('Movies - MoiMovies');
 
-  // 2. Khai báo searchParams để đọc/ghi URL
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // 3. Lấy số trang từ URL. Nếu không có thì mặc định là 1
   const page = parseInt(searchParams.get('page')) || 1;
 
   const fetchMovies = async (pageNumber) => {
@@ -34,14 +32,12 @@ const MovieList = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // 4. useEffect sẽ chạy mỗi khi số 'page' trên URL thay đổi
   useEffect(() => {
     fetchMovies(page);
   }, [page]);
 
-  // 5. Hàm đổi trang: Thay vì set state, ta set URL
   const handlePageChange = (newPage) => {
-    setSearchParams({ page: newPage }); // URL sẽ đổi thành /movie?page=2
+    setSearchParams({ page: newPage });
   };
 
   if (loading) return <ListSkeleton />;
@@ -67,7 +63,7 @@ const MovieList = () => {
           <div className="text-center w-full mt-10 text-gray-400 text-lg">No movies found.</div>
       )}
 
-      {/* Pagination giữ nguyên, chỉ thay đổi hàm handlePageChange ở trên */}
+      {/* Pagination */}
       {!loading && movies.length > 0 && (
         <Pagination 
             currentPage={page} 

@@ -13,7 +13,6 @@ const SeriesList = () => {
 
   useDocumentTitle('TV Series - MoiMovies');
   
-  // 1. Hook quản lý URL params
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page')) || 1;
 
@@ -38,7 +37,6 @@ const SeriesList = () => {
     fetchSeries(page);
   }, [page]);
 
-  // 👇 2. THÊM HÀM NÀY ĐỂ XỬ LÝ CHUYỂN TRANG
   const handlePageChange = (newPage) => {
     setSearchParams({ page: newPage });
   };
@@ -76,7 +74,6 @@ const SeriesList = () => {
         <Pagination 
             currentPage={page} 
             totalPages={totalPages} 
-            // 👇 SỬA LẠI DÒNG NÀY: Dùng handlePageChange thay vì setPage
             onPageChange={handlePageChange} 
         />
       )}

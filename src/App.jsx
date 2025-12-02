@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import MainLayout from './components/layout/MainLayout';
 
-// Import các trang từ thư mục pages
 import HomePage from './pages/HomePage';
 import MovieList from './pages/MovieList';
 import SeriesList from './pages/SeriesList';
@@ -23,7 +22,6 @@ function App() {
     <AuthProvider>
       <Router>
           <Routes>
-            {/* Tất cả các route đều nằm trong MainLayout để có chung Header/Footer */}
             <Route path="/" element={<MainLayout />}>
                 
                 {/* Trang chủ */}
@@ -45,7 +43,7 @@ function App() {
                 <Route path="country/:id" element={<div className="pt-0"><CountryPage /></div>} />
                 <Route path="person/:id" element={<div className="pt-0"><PersonPage /></div>} />
 
-                {/* Trang cá nhân (Cần đăng nhập) */}
+                {/* Trang cá nhân */}
                 <Route path="watchlist" element={<div className="pt-24"><WatchlistPage /></div>} />
                 <Route path="profile" element={<div className="pt-24"><ProfilePage /></div>} />
                 

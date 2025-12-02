@@ -2,10 +2,9 @@ import { useEffect } from 'react';
 
 const useDocumentTitle = (title) => {
   useEffect(() => {
-    const prevTitle = document.title; // Lưu lại tiêu đề cũ
-    document.title = title; // Đổi sang tiêu đề mới
+    const prevTitle = document.title;
+    document.title = title;
 
-    // Khi thoát trang thì trả lại tiêu đề cũ (hoặc giữ nguyên tùy ý, thường thì không cần dòng này cũng được)
     // return () => {
     //   document.title = prevTitle;
     // };

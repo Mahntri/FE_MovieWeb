@@ -16,7 +16,7 @@ const ReportTable = ({ reports, onResolve }) => {
         {reports.map(item => (
             <div key={item._id} className="bg-[#1f1f1f] p-3 rounded-lg border border-yellow-600/30 flex gap-3 items-center shadow-sm hover:border-yellow-500 transition">
                 
-                {/* Icon đại diện nhỏ gọn (w-8 h-8) */}
+                {/* Icon đại diện */}
                 <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center text-yellow-500 text-sm flex-shrink-0">
                     <VideoCameraOutlined />
                 </div>
@@ -48,7 +48,7 @@ const ReportTable = ({ reports, onResolve }) => {
                     </div>
                 </div>
 
-                {/* Nút bấm nhỏ gọn */}
+                {/* Nút bấm */}
                 <button 
                     onClick={() => onResolve(item._id)}
                     className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-bold transition shadow-md flex items-center gap-1 flex-shrink-0"

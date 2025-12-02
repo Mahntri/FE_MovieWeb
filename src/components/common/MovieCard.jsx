@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons'; 
 import tmdbApi from '../../api/tmdbApi';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE_URL } from '../../api/config';
 
 const MovieCard = ({ movie, tv, img, id }) => {
     const navigate = useNavigate();
@@ -25,10 +26,9 @@ const MovieCard = ({ movie, tv, img, id }) => {
     const [coords, setCoords] = useState({ top: 0, left: 0, width: 0 });
     
     const timerRef = useRef(null);
-    const posterRef = useRef(null); // Đổi tên ref cho rõ nghĩa
+    const posterRef = useRef(null);
 
     const handleMouseEnter = () => {
-        // Tính toán vị trí dựa trên POSTER (ảnh), không phải toàn bộ thẻ
         if (posterRef.current) {
             const rect = posterRef.current.getBoundingClientRect();
             setCoords({
@@ -94,14 +94,14 @@ const MovieCard = ({ movie, tv, img, id }) => {
 
     return (
         <>
-            {/* --- THẺ GỐC (CONTAINER) --- */}
+            {/* --- CONTAINER --- */}
             <div 
                 className="w-full cursor-pointer group z-0 flex flex-col"
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 onClick={handleClick}
             >
-                {/* 1. PHẦN ẢNH (POSTER) - Gắn ref vào đây */}
+                {/* POSTER */}
                 <div 
                     ref={posterRef}
                     className="relative w-full aspect-[2/3] bg-gray-900 rounded-lg overflow-hidden z-10"
@@ -119,13 +119,13 @@ const MovieCard = ({ movie, tv, img, id }) => {
                     )}
                 </div>
 
-                {/* 2. PHẦN TÊN PHIM (ĐÃ THÊM LẠI) */}
+                {/* TÊN PHIM */}
                 <p className="mt-2 text-sm font-semibold text-gray-300 truncate group-hover:text-white transition-colors text-center">
                     {title}
                 </p>
             </div>
 
-            {/* --- POPUP CHI TIẾT (GIỮ NGUYÊN) --- */}
+            {/* --- CHI TIẾT --- */}
             {isHovered && createPortal(
                 <div 
                     onMouseLeave={handleMouseLeave}

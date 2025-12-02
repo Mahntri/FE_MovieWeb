@@ -10,7 +10,6 @@ const GenrePage = () => {
     const { id } = useParams();
     const [items, setItems] = useState([]);
     
-    // 2. Thay thế useState page bằng useSearchParams
     const [searchParams, setSearchParams] = useSearchParams();
     const page = parseInt(searchParams.get('page')) || 1;
 
@@ -42,8 +41,6 @@ const GenrePage = () => {
         setLoading(false);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-
-    // Khi đổi thể loại (id thay đổi) -> Reset về trang 1
     useEffect(() => {
         const getGenreName = async () => {
             try {
@@ -57,17 +54,14 @@ const GenrePage = () => {
         
     }, [id]);
 
-    // Gọi data khi page hoặc id thay đổi
     useEffect(() => {
         fetchData(page);
     }, [id, page]);
 
-    // 3. Hàm xử lý chuyển trang
     const handlePageChange = (newPage) => {
         setSearchParams({ page: newPage });
     };
 
-    // Skeleton Loading
     if (loading) return <ListSkeleton />;
 
     return (
@@ -98,7 +92,7 @@ const GenrePage = () => {
                  <Pagination 
                     currentPage={page} 
                     totalPages={totalPages} 
-                    onPageChange={handlePageChange} // 4. Sử dụng hàm handlePageChange
+                    onPageChange={handlePageChange}
                 />
             )}
             <div className="pb-10"></div>

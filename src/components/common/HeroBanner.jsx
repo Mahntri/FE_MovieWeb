@@ -5,22 +5,20 @@ import TrailerModal from './TrailerModal';
 import { useNavigate, Link } from 'react-router-dom';
 import BannerSkeleton from '../skeletons/BannerSkeleton';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE_URL } from '../../api/config';
 
-// Import Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, EffectFade } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 
-// 👇 1. COMPONENT CON: NÚT LƯU WATCHLIST RIÊNG BIỆT
 const HeroWatchlistButton = ({ movieId }) => {
     const { user, openModal } = useAuth();
     const [isAdded, setIsAdded] = useState(false);
     const token = localStorage.getItem('token');
-    const type = 'movie'; // Banner trang chủ mặc định là movie
+    const type = 'movie';
 
-    // Kiểm tra trạng thái khi phim thay đổi
     useEffect(() => {
         const checkStatus = async () => {
             if (!user) return setIsAdded(false);
@@ -36,7 +34,6 @@ const HeroWatchlistButton = ({ movieId }) => {
         checkStatus();
     }, [movieId, user]);
 
-    // Xử lý Click
     const handleToggle = async () => {
         if (!user) return openModal('login');
         try {
@@ -64,7 +61,7 @@ const HeroWatchlistButton = ({ movieId }) => {
         </button>
     );
 };
-// 👆 KẾT THÚC COMPONENT CON
+
 
 const HeroBanner = () => {
   const [movies, setMovies] = useState([]);
@@ -164,7 +161,6 @@ const HeroBanner = () => {
                             Watch trailer
                         </button>
 
-                        {/* 👇 2. NHÚNG COMPONENT NÚT LƯU VÀO ĐÂY */}
                         <HeroWatchlistButton movieId={movie.id} />
                     </div>
                 </div>

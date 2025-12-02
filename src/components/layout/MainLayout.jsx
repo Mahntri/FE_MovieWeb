@@ -1,9 +1,9 @@
 import React from 'react';
-import { Outlet, useLocation } from 'react-router-dom'; // Outlet là nơi nội dung các trang con (Home, Movie...) hiển thị
-import Header from '../common/Header';     // Import từ thư mục common
+import { Outlet, useLocation } from 'react-router-dom';
+import Header from '../common/Header';
 import Footer from '../common/Footer';
 import AuthModal from '../common/AuthModal';
-import { useAuth } from '../../context/AuthContext'; // Import context (lùi 2 cấp thư mục)
+import { useAuth } from '../../context/AuthContext';
 
 const MainLayout = () => {
   const { isModalOpen } = useAuth();
@@ -21,7 +21,7 @@ const MainLayout = () => {
 
       {!isAdminPage && <Footer />}
 
-      {/* Popup Đăng nhập/Đăng ký hiển thị toàn cục */}
+      {/* Popup Đăng nhập/Đăng ký */}
       {isModalOpen && <AuthModal />}
       
     </div>

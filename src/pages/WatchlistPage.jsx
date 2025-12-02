@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom'; // Import useSearchParams
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import tmdbApi from '../api/tmdbApi';
 import { CloseCircleFilled, PlayCircleOutlined } from '@ant-design/icons';
 import ListSkeleton from '../components/skeletons/ListSkeleton'; 
-import Pagination from '../components/common/Pagination'; // Import Pagination
+import Pagination from '../components/common/Pagination';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import { API_BASE_URL } from '../../src/api/config';
 
-const ITEMS_PER_PAGE = 20; // Quy định số phim mỗi trang
+const ITEMS_PER_PAGE = 20;
 
 const WatchlistPage = () => {
     const [movies, setMovies] = useState([]);
@@ -14,7 +15,6 @@ const WatchlistPage = () => {
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
 
-    // Quản lý phân trang
     const [searchParams, setSearchParams] = useSearchParams();
     const page = parseInt(searchParams.get('page')) || 1;
 
@@ -30,10 +30,8 @@ const WatchlistPage = () => {
             const backendData = await res.json();
             
             if (backendData.data && Array.isArray(backendData.data) && backendData.data.length > 0) {
-                // Lấy toàn bộ danh sách ID
-                const allFavoriteIDs = backendData.data.reverse(); // Đảo ngược để phim mới thêm lên đầu
+                const allFavoriteIDs = backendData.data.reverse();
 
-                // 👇 CHỈ LẤY ID CỦA TRANG HIỆN TẠI ĐỂ GỌI API (TỐI ƯU TỐC ĐỘ)
                 const startIndex = (page - 1) * ITEMS_PER_PAGE;
                 const endIndex = startIndex + ITEMS_PER_PAGE;
                 const currentIds = allFavoriteIDs.slice(startIndex, endIndex);
@@ -56,7 +54,6 @@ const WatchlistPage = () => {
                 const results = await Promise.all(detailPromises);
                 setMovies(results.filter(m => m !== null));
                 
-                // Tính tổng số trang dựa trên TỔNG SỐ phim
                 setTotalPages(Math.ceil(allFavoriteIDs.length / ITEMS_PER_PAGE));
             } else {
                 setMovies([]);
@@ -74,7 +71,7 @@ const WatchlistPage = () => {
 
     useEffect(() => {
         fetchFavorites();
-    }, [page]); // Gọi lại khi chuyển trang
+    }, [page]);
 
     const handlePageChange = (newPage) => {
         setSearchParams({ page: newPage });
@@ -93,7 +90,6 @@ const WatchlistPage = () => {
             });
 
             if (res.ok) {
-                // Sau khi xóa, load lại danh sách trang hiện tại
                 fetchFavorites(); 
             }
         } catch (error) { console.error("Lỗi xóa:", error); }
@@ -150,7 +146,7 @@ const WatchlistPage = () => {
                 </div>
             )}
 
-            {/* 👇 THANH PHÂN TRANG 👇 */}
+            {/* Pagination */}
             {!loading && movies.length > 0 && totalPages > 1 && (
                 <Pagination 
                     currentPage={page} 

@@ -6,6 +6,7 @@ import UserTable from '../components/admin/UserTable';
 import CommentTable from '../components/admin/CommentTable';
 import ReportTable from '../components/admin/ReportTable';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import { API_BASE_URL } from '../api/config';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -17,7 +18,7 @@ const AdminPage = () => {
     const [activeTab, setActiveTab] = useState('users');
     const [accounts, setAccounts] = useState([]);
     const [reportedComments, setReportedComments] = useState([]);
-    const [videoReports, setVideoReports] = useState([]); // State cho báo lỗi phim
+    const [videoReports, setVideoReports] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
     useDocumentTitle('Admin Dashboard');
@@ -31,17 +32,17 @@ const AdminPage = () => {
 
     const fetchData = async () => {
         try {
-            // 1. Users
+            // Users
             const resAccounts = await fetch(`${API_BASE_URL}/api/admin/accounts`, { headers: { 'Authorization': `Bearer ${token}` } });
             const dataAccounts = await resAccounts.json();
             if (dataAccounts.data) setAccounts(dataAccounts.data);
 
-            // 2. Reported Comments
+            // Reported Comments
             const resReports = await fetch(`${API_BASE_URL}/api/comments/admin/reported`, { headers: { 'Authorization': `Bearer ${token}` } });
             const dataReports = await resReports.json();
             if (dataReports.data) setReportedComments(dataReports.data);
 
-            // 3. Video Reports (Mới)
+            // Video Reports (Mới)
             const resVideoReports = await fetch(`${API_BASE_URL}/api/reports/admin`, { headers: { 'Authorization': `Bearer ${token}` } });
             const dataVideoReports = await resVideoReports.json();
             if (dataVideoReports.data) setVideoReports(dataVideoReports.data);
@@ -72,7 +73,7 @@ const AdminPage = () => {
         fetchData();
     };
 
-    // Logic Phân trang & Chọn Data
+    // Phân trang
     let currentData = [];
     if (activeTab === 'users') currentData = accounts;
     else if (activeTab === 'comments') currentData = reportedComments;
@@ -83,7 +84,7 @@ const AdminPage = () => {
 
     return (
         <div className="pt-20 min-h-screen bg-[#121212] text-white flex">
-            {/* 1. SIDEBAR */}
+            {/* SIDEBAR */}
             <AdminSidebar 
                 activeTab={activeTab} 
                 setActiveTab={setActiveTab} 
@@ -91,7 +92,7 @@ const AdminPage = () => {
                 videoReportCount={videoReports.length}
             />
 
-            {/* 2. CONTENT AREA */}
+            {/* CONTENT */}
             <div className="flex-1 ml-64 p-8 relative min-h-[calc(100vh-80px)] flex flex-col">
                 
                 <div className="flex justify-between items-center mb-6">
@@ -106,7 +107,7 @@ const AdminPage = () => {
                     </div>
                 </div>
 
-                {/* 3. HIỂN THỊ BẢNG (SỬA LẠI LOGIC ĐIỀU KIỆN CHO RÕ RÀNG) */}
+                {/* TABLE */}
                 <div className="flex-1">
                     {activeTab === 'users' && (
                         <UserTable users={currentItems} onDelete={handleDeleteUser} />
@@ -126,7 +127,7 @@ const AdminPage = () => {
                     )}
                 </div>
 
-                {/* 4. THANH PHÂN TRANG */}
+                {/* PAGINATION */}
                 {totalPages > 1 && (
                     <div className="flex justify-end mt-auto pt-6 space-x-2">
                         {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (

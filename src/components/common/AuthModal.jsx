@@ -5,14 +5,13 @@ import {
     MailOutlined, NumberOutlined, ArrowLeftOutlined 
 } from '@ant-design/icons';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE_URL } from '../../api/config';
 
 const AuthModal = () => {
     const { closeModal, login, initialMode } = useAuth();
     
-    // view: 'login' | 'register' | 'forgot'
     const [view, setView] = useState('login'); 
     
-    // forgotStep: 1 (Email), 2 (OTP), 3 (New Password)
     const [forgotStep, setForgotStep] = useState(1); 
 
     // Timer cho OTP
@@ -31,7 +30,7 @@ const AuthModal = () => {
         resetForm();
     }, [initialMode]);
 
-    // Logic đếm ngược 60s
+    // Đếm ngược 60s
     useEffect(() => {
         let interval;
         if (view === 'forgot' && forgotStep === 2 && timer > 0) {
@@ -79,9 +78,9 @@ const AuthModal = () => {
         setLoading(false);
     };
 
-    // --- XỬ LÝ QUÊN MẬT KHẨU (3 BƯỚC) ---
+    // --- XỬ LÝ QUÊN MẬT KHẨU ---
 
-    // BƯỚC 1: Gửi Email -> Chuyển sang bước 2
+    // Gửi Email
     const handleSendOtp = async (e) => {
         if(e) e.preventDefault();
         setError(''); setLoading(true);
@@ -94,7 +93,6 @@ const AuthModal = () => {
             const data = await res.json();
             if (!res.ok) throw new Error(data.message);
             
-            // Thành công -> Chuyển sang nhập OTP và reset timer
             setForgotStep(2);
             setTimer(60);
             setCanResend(false);
@@ -102,7 +100,7 @@ const AuthModal = () => {
         setLoading(false);
     };
 
-    // BƯỚC 2: Xác thực OTP -> Chuyển sang bước 3
+    // Xác thực OTP
     const handleVerifyOtp = async (e) => {
         e.preventDefault();
         setError(''); setLoading(true);
@@ -115,13 +113,12 @@ const AuthModal = () => {
             const data = await res.json();
             if (!res.ok) throw new Error(data.message);
 
-            // OTP đúng -> Chuyển sang nhập pass mới
             setForgotStep(3);
         } catch (err) { setError(err.message); }
         setLoading(false);
     };
 
-    // BƯỚC 3: Đổi mật khẩu -> Xong
+    // Đổi mật khẩu
     const handleResetPassword = async (e) => {
         e.preventDefault();
         setError(''); setLoading(true);
@@ -170,7 +167,7 @@ const AuthModal = () => {
 
                 {error && <div className="bg-red-500/10 text-red-500 p-3 rounded-lg mb-6 text-sm text-center border border-red-500/20">{error}</div>}
 
-                {/* --- FORM LOGIN / REGISTER --- */}
+                {/* --- FORM --- */}
                 {(view === 'login' || view === 'register') && (
                     <form onSubmit={handleLoginRegister} className="space-y-5">
                         {view === 'register' && (
@@ -195,7 +192,7 @@ const AuthModal = () => {
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white cursor-pointer" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}</div>
                         </div>
 
-                        {/* Footer Links */}
+                        {/* Footer */}
                         <div className="flex justify-between items-center text-xs px-1 pt-2">
                             {view === 'login' ? (
                                 <>
@@ -221,11 +218,11 @@ const AuthModal = () => {
                     </form>
                 )}
 
-                {/* --- FLOW QUÊN MẬT KHẨU --- */}
+                {/* --- QUÊN MẬT KHẨU --- */}
                 {view === 'forgot' && (
                     <div className="space-y-5">
                         
-                        {/* BƯỚC 1: NHẬP EMAIL */}
+                        {/* NHẬP EMAIL */}
                         {forgotStep === 1 && (
                             <form onSubmit={handleSendOtp} className="space-y-5">
                                 <div className="relative group">
@@ -236,7 +233,7 @@ const AuthModal = () => {
                             </form>
                         )}
 
-                        {/* BƯỚC 2: NHẬP OTP */}
+                        {/* NHẬP OTP */}
                         {forgotStep === 2 && (
                             <form onSubmit={handleVerifyOtp} className="space-y-5">
                                 <div className="text-center mb-4">
@@ -267,7 +264,7 @@ const AuthModal = () => {
                             </form>
                         )}
 
-                        {/* BƯỚC 3: MẬT KHẨU MỚI */}
+                        {/* MẬT KHẨU MỚI */}
                         {forgotStep === 3 && (
                             <form onSubmit={handleResetPassword} className="space-y-5">
                                 <div className="relative group">

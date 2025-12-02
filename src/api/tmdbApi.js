@@ -95,16 +95,14 @@ const tmdbApi = {
 
   getFilmFromKKPhim: async (type, id) => {
     try {
-      // Gọi API convert từ TMDB ID sang KKPhim
-      // type: 'movie' hoặc 'tv'
       const res = await axios.get(`https://phimapi.com/tmdb/${type}/${id}`);
       return res.data;
     } catch (error) {
       console.error("KKPhim không có phim này:", error);
-      return null; // Trả về null nếu không tìm thấy
+      return null;
     }
   },
-  // 👇 1. TÌM PHIM TRÊN KKPHIM BẰNG TỪ KHÓA
+  
   searchKKPhim: async (keyword) => {
     try {
       const res = await axios.get(`https://phimapi.com/v1/api/tim-kiem?keyword=${keyword}&limit=5`);
@@ -115,7 +113,6 @@ const tmdbApi = {
     }
   },
 
-  // 👇 2. LẤY CHI TIẾT PHIM TỪ KKPHIM BẰNG SLUG (Khi tìm thấy tên)
   getFilmFromKKPhimBySlug: async (slug) => {
     try {
       const res = await axios.get(`https://phimapi.com/phim/${slug}`);
