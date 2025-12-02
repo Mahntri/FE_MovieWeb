@@ -19,9 +19,9 @@ const tmdbApi = {
     return res.data;
   },
 
-  getTopRatedTV: async () => {
-    const response = await axios.get(`${BASE_URL}/tv/top_rated?api_key=${API_KEY}`);
-    return response.data.results;
+  getTopRatedTV: async (page = 1) => {
+    const res = await axios.get(`${BASE_URL}/tv/top_rated?page=${page}&api_key=${API_KEY}`);
+    return res.data; 
   },
   
   getMovieVideos: async (movieId) => {
@@ -91,6 +91,39 @@ const tmdbApi = {
   getMoviesByCountry: async (countryCode, page = 1) => {
     const res = await axios.get(`${BASE_URL}/discover/movie?with_origin_country=${countryCode}&page=${page}&api_key=${API_KEY}&sort_by=popularity.desc`);
     return res.data;
+  },
+
+  getFilmFromKKPhim: async (type, id) => {
+    try {
+      // Gọi API convert từ TMDB ID sang KKPhim
+      // type: 'movie' hoặc 'tv'
+      const res = await axios.get(`https://phimapi.com/tmdb/${type}/${id}`);
+      return res.data;
+    } catch (error) {
+      console.error("KKPhim không có phim này:", error);
+      return null; // Trả về null nếu không tìm thấy
+    }
+  },
+  // 👇 1. TÌM PHIM TRÊN KKPHIM BẰNG TỪ KHÓA
+  searchKKPhim: async (keyword) => {
+    try {
+      const res = await axios.get(`https://phimapi.com/v1/api/tim-kiem?keyword=${keyword}&limit=5`);
+      return res.data;
+    } catch (error) {
+      console.error("Lỗi tìm kiếm KKPhim:", error);
+      return null;
+    }
+  },
+
+  // 👇 2. LẤY CHI TIẾT PHIM TỪ KKPHIM BẰNG SLUG (Khi tìm thấy tên)
+  getFilmFromKKPhimBySlug: async (slug) => {
+    try {
+      const res = await axios.get(`https://phimapi.com/phim/${slug}`);
+      return res.data;
+    } catch (error) {
+      console.error("Lỗi lấy phim theo slug:", error);
+      return null;
+    }
   }
 };
 
