@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom'; // 1. Import useSearchParams
+import { useParams, useSearchParams } from 'react-router-dom';
 import tmdbApi from '../api/tmdbApi';
 import MovieCard from '../components/common/MovieCard'; 
 import Pagination from '../components/common/Pagination';
@@ -10,7 +10,7 @@ const SearchPage = () => {
     const { keyword } = useParams();
     const [movies, setMovies] = useState([]);
 
-    useDocumentTitle(`Kết quả tìm kiếm ${keyword} - MoiMovies`);
+    useDocumentTitle(`Search results for "${keyword}" - MoiMovies`);
     
     const [searchParams, setSearchParams] = useSearchParams();
     const page = parseInt(searchParams.get('page')) || 1;

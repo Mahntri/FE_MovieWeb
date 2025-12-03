@@ -11,6 +11,8 @@ import {
 import { useAuth } from '../context/AuthContext';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 import { API_BASE_URL } from '../../src/api/config';
+import { useToast } from '../context/ToastContext';
+import ConfirmModal from '../components/common/ConfirmModal';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
@@ -19,6 +21,7 @@ import 'swiper/css/free-mode';
 
 const MovieDetailPage = () => {
   const { type, id } = useParams();
+  const toast = useToast();
   
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
@@ -43,6 +46,13 @@ const MovieDetailPage = () => {
   const [newComment, setNewComment] = useState('');
   const [commentLoading, setCommentLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState('desc');
+
+  const [confirmDialog, setConfirmDialog] = useState({
+        isOpen: false,
+        title: "",
+        message: "",
+        onConfirm: null
+    });
 
   const pageTitle = movie ? `${movie.title || movie.name} - MoiMovies` : 'Loading... | MoiMovies';
   useDocumentTitle(pageTitle);
@@ -153,10 +163,10 @@ const MovieDetailPage = () => {
           });
           const data = await res.json();
           if (res.ok) setIsFavorite(!isFavorite);
-          else alert(data.message || "Lỗi khi cập nhật danh sách");
+          else toast.error(data.message || "Error updating favorite list");
       } catch (error) {
-          console.error("Lỗi yêu thích:", error);
-          alert("Lỗi kết nối server");
+          console.error("Error updating favorite list:", error);
+          toast.error("Error updating favorite list");
       }
   };
 
@@ -181,44 +191,65 @@ const MovieDetailPage = () => {
               setComments([result.data, ...comments]);
               setNewComment('');
           } else {
-              alert(result.message || "Lỗi gửi bình luận");
+              toast.error(result.message || "Error posting comment");
           }
       } catch (error) {
           console.error(error);
-          alert("Lỗi kết nối");
+          toast.error("Error connecting to server");
       }
       setCommentLoading(false);
   };
 
-  const handleReport = async (commentId) => {
-        if(!window.confirm("Bạn có muốn báo cáo bình luận này vi phạm tiêu chuẩn cộng đồng?")) return;
+  const executeReport = async (commentId) => {
         try {
             const res = await fetch(`${API_BASE_URL}/api/comments/${commentId}/report`, {
                 method: 'PUT',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            if(res.ok) alert("Đã gửi báo cáo thành công!");
+            if(res.ok) toast.success("Sent report successfully!");
         } catch (error) {
             console.error(error);
         }
-  };
+        // Đóng hộp thoại sau khi xong
+        setConfirmDialog({ ...confirmDialog, isOpen: false });
+    };
 
-  const handleDeleteComment = async (commentId) => {
-    if (!window.confirm("Bạn chắc chắn muốn xóa bình luận này?")) return;
-    try {
-        const res = await fetch(`${API_BASE_URL}/api/comments/${commentId}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (res.ok) {
-            setComments(prev => prev.filter(c => c._id !== commentId));
-        } else {
-            alert("Không thể xóa bình luận này.");
+  const executeDelete = async (commentId) => {
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/comments/${commentId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                setComments(prev => prev.filter(c => c._id !== commentId));
+                toast.success("Deleted comment successfully!");
+            } else {
+                toast.error("Unable to delete this comment.");
+            }
+        } catch (error) {
+            console.error(error);
         }
-    } catch (error) {
-        console.error(error);
-    }
-  };
+        // Đóng hộp thoại
+        setConfirmDialog({ ...confirmDialog, isOpen: false });
+    };
+
+    const handleReport = (commentId) => {
+        setConfirmDialog({
+            isOpen: true,
+            title: "Report Comment",
+            message: "Are you sure you want to report this comment for violating community standards?",
+            onConfirm: () => executeReport(commentId)
+        });
+    };
+
+    const handleDeleteComment = (commentId) => {
+        setConfirmDialog({
+            isOpen: true,
+            title: "Delete Comment",
+            message: "This action cannot be undone. Are you sure you want to delete this comment?",
+            onConfirm: () => executeDelete(commentId)
+        });
+    };
 
   const currentComments = comments.slice(0, visibleComments);
   
@@ -231,7 +262,7 @@ const MovieDetailPage = () => {
       freeMode: true,
       grabCursor: true,
       slidesPerView: "auto",
-      spaceBetween: 16, // Khoảng cách giữa các ảnh
+      spaceBetween: 16,
       className: "w-full"
   };
 
@@ -294,7 +325,7 @@ const MovieDetailPage = () => {
                     {isFavorite ? 'Added' : 'Add to Watchlist'}
                 </button>
                 <button onClick={() => navigate(`/watch/${type}/${id}`)} className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full font-bold text-base md:text-lg transition shadow-lg hover:shadow-red-600/40 flex items-center gap-2"><PlayCircleOutlined /> Watch Now</button>
-                <button onClick={() => { if (trailer) setShowTrailer(true); else alert("Trailer not available"); }} className="bg-white text-black hover:bg-gray-200 px-6 py-3 rounded-full font-bold text-base md:text-lg transition shadow-lg flex items-center gap-2"><YoutubeFilled className="text-red-600 text-xl" /> Trailer</button>
+                <button onClick={() => { if (trailer) setShowTrailer(true); else toast.error("Trailer not available"); }} className="bg-white text-black hover:bg-gray-200 px-6 py-3 rounded-full font-bold text-base md:text-lg transition shadow-lg flex items-center gap-2"><YoutubeFilled className="text-red-600 text-xl" /> Trailer</button>
             </div>
           </div>
         </div>
@@ -324,7 +355,7 @@ const MovieDetailPage = () => {
             <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
             {casts.map(cast => (
                 <div key={cast.id} className="flex flex-col items-center min-w-[100px] cursor-pointer group" onClick={() => navigate(`/person/${cast.id}`)}>
-                    <img src={cast.profile_path ? `https://image.tmdb.org/t/p/w185${cast.profile_path}` : 'https://via.placeholder.com/100x150'} alt={cast.name} className="rounded-lg w-24 h-32 object-cover mb-2 shadow-md group-hover:scale-105 transition duration-300"/>
+                    <img src={cast.profile_path ? `https://image.tmdb.org/t/p/w185${cast.profile_path}` : 'https://placehold.co/100x150'} alt={cast.name} className="rounded-lg w-24 h-32 object-cover mb-2 shadow-md group-hover:scale-105 transition duration-300"/>
                     <p className="text-xs text-center font-semibold line-clamp-2 w-full group-hover:text-red-500 transition">{cast.name}</p>
                 </div>
             ))}
@@ -338,7 +369,7 @@ const MovieDetailPage = () => {
                 <h2 className="text-2xl font-semibold mb-6 border-l-4 border-red-500 pl-3">Backdrops</h2>
                 <Swiper {...swiperConfig}>
                     {backdrops.map((img, i) => (
-                        <SwiperSlide key={i} className="!w-auto"> {/* !w-auto: Width tự tính theo chiều cao ảnh */}
+                        <SwiperSlide key={i} className="!w-auto">
                             <img 
                                 src={`https://image.tmdb.org/t/p/w500${img.file_path}`} 
                                 alt="Backdrop" 
@@ -402,7 +433,7 @@ const MovieDetailPage = () => {
             <div className="space-y-4">
                 {currentComments.length > 0 ? (currentComments.map((cmt) => 
                 (<div key={cmt._id} className="bg-[#1a1a1a] p-4 rounded-lg flex gap-4 border-b border-gray-800 relative group">
-                        <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-700 flex-shrink-0 mt-1"><img src={cmt.userId?.avatar || "https://via.placeholder.com/150"} alt="User" className="w-full h-full object-cover"/></div>
+                        <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-700 flex-shrink-0 mt-1"><img src={cmt.userId?.avatar || "https://animevietsub.show/statics/images/user-image.png"} alt="User" className="w-full h-full object-cover"/></div>
                         <div className="flex-1">
                             <div className="flex items-center gap-3 mb-1"><span className="font-bold text-white text-sm">{cmt.userId?.fullName || "Unknown"}</span>{user && user._id === cmt.userId?.accountId && (<span className="text-[10px] bg-gray-700 text-gray-300 px-1.5 py-0.5 rounded border border-gray-600">You</span>)}</div>
                             <span className="text-xs text-gray-500 block mb-2">{new Date(cmt.createdAt).toLocaleDateString()}</span>
@@ -430,11 +461,19 @@ const MovieDetailPage = () => {
         </div>
 
         {/* SIMILAR */}
-        <div className="mt-10"><h2 className="text-2xl font-semibold mb-6 border-l-4 border-red-500 pl-3">You May Also Like</h2><div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">{similar.slice(0, 5).map(item => (<div key={item.id} className="cursor-pointer group relative" onClick={() => navigate(`/${type}/${item.id}`)}><div className="relative rounded-lg overflow-hidden mb-2 aspect-[2/3]"><img src={item.poster_path ? `https://image.tmdb.org/t/p/w300${item.poster_path}` : 'https://via.placeholder.com/300x450'} className="w-full h-full object-cover transition duration-300 group-hover:scale-110 group-hover:brightness-50" alt={item.title || item.name}/><div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"><PlayCircleOutlined style={{ fontSize: 40, color: 'white' }} /></div></div><p className="text-sm font-semibold truncate text-gray-300 group-hover:text-red-500 transition">{item.title || item.name}</p></div>))}</div>{similar.length === 0 && (<p className="text-gray-500 italic">No similar movies found.</p>)}</div>
+        <div className="mt-10"><h2 className="text-2xl font-semibold mb-6 border-l-4 border-red-500 pl-3">You May Also Like</h2><div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">{similar.slice(0, 5).map(item => (<div key={item.id} className="cursor-pointer group relative" onClick={() => navigate(`/${type}/${item.id}`)}><div className="relative rounded-lg overflow-hidden mb-2 aspect-[2/3]"><img src={item.poster_path ? `https://image.tmdb.org/t/p/w300${item.poster_path}` : 'https://placehold.co/300x450'} className="w-full h-full object-cover transition duration-300 group-hover:scale-110 group-hover:brightness-50" alt={item.title || item.name}/><div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"><PlayCircleOutlined style={{ fontSize: 40, color: 'white' }} /></div></div><p className="text-sm font-semibold truncate text-gray-300 group-hover:text-red-500 transition">{item.title || item.name}</p></div>))}</div>{similar.length === 0 && (<p className="text-gray-500 italic">No similar movies found.</p>)}</div>
 
       </div>
 
       {showTrailer && trailer && <TrailerModal videoKey={trailer.key} onClose={() => setShowTrailer(false)} />}
+
+        <ConfirmModal 
+            isOpen={confirmDialog.isOpen}
+            title={confirmDialog.title}
+            message={confirmDialog.message}
+            onConfirm={confirmDialog.onConfirm}
+            onCancel={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
+        />
     </div>
   );
 };

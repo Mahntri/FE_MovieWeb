@@ -3,10 +3,12 @@ import { useAuth } from '../context/AuthContext';
 import { UploadOutlined, UserOutlined } from '@ant-design/icons';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 import { API_BASE_URL } from '../api/config';
+import { useToast } from '../context/ToastContext';
 
 const ProfilePage = () => {
     const { user, login } = useAuth();
     const token = localStorage.getItem('token');
+    const toast = useToast();
 
     const [formData, setFormData] = useState({
         username: '',
@@ -61,14 +63,14 @@ const ProfilePage = () => {
             const result = await res.json();
 
             if (res.ok) {
-                alert("Cập nhật thành công!");
+                toast.success("Profile updated successfully!");
                 login(result.data, token); 
             } else {
-                alert(result.message || "Lỗi cập nhật");
+                toast.error(result.message || "Error updating profile");
             }
         } catch (error) {
             console.error(error);
-            alert("Lỗi kết nối server");
+            toast.error("Error connecting to server");
         }
         setLoading(false);
     };

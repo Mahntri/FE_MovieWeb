@@ -107,7 +107,7 @@ const MovieCard = ({ movie, tv, img, id }) => {
                     className="relative w-full aspect-[2/3] bg-gray-900 rounded-lg overflow-hidden z-10"
                 >
                     <img
-                        src={img ? `https://image.tmdb.org/t/p/w500${img}` : 'https://via.placeholder.com/300x450'}
+                        src={img ? `https://image.tmdb.org/t/p/w500${img}` : 'https://placehold.co/300x450'}
                         alt={title}
                         className="w-full h-full object-cover transition duration-300"
                         loading="lazy"

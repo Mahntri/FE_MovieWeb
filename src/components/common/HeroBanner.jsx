@@ -6,6 +6,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import BannerSkeleton from '../skeletons/BannerSkeleton';
 import { useAuth } from '../../context/AuthContext';
 import { API_BASE_URL } from '../../api/config';
+import { useToast } from '../../context/ToastContext';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, EffectFade } from 'swiper/modules';
@@ -18,12 +19,13 @@ const HeroWatchlistButton = ({ movieId }) => {
     const [isAdded, setIsAdded] = useState(false);
     const token = localStorage.getItem('token');
     const type = 'movie';
+    const toast = useToast();
 
     useEffect(() => {
         const checkStatus = async () => {
             if (!user) return setIsAdded(false);
             try {
-                const res = await fetch('${API_BASE_URL}/api/user/favorites', {
+                const res = await fetch(`${API_BASE_URL}/api/user/favorites`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await res.json();
@@ -94,7 +96,7 @@ const HeroBanner = () => {
       const videos = await tmdbApi.getMovieVideos(movieId);
       const trailer = videos.find((v) => v.type === 'Trailer' && v.site === 'YouTube');
       if (trailer) setTrailerKey(trailer.key);
-      else alert('Trailer not available');
+      else toast.error('Trailer not available');
     } catch (err) { console.error(err); }
   };
 

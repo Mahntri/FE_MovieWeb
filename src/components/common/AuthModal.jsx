@@ -5,6 +5,7 @@ import {
     MailOutlined, NumberOutlined, ArrowLeftOutlined 
 } from '@ant-design/icons';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 import { API_BASE_URL } from '../../api/config';
 
 const AuthModal = () => {
@@ -24,6 +25,8 @@ const AuthModal = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+
+    const toast = useToast();
 
     useEffect(() => {
         setView(initialMode);
@@ -69,12 +72,13 @@ const AuthModal = () => {
             if (!res.ok) throw new Error(data.message);
 
             if (view === 'register') {
-                alert("Đăng ký thành công! Hãy đăng nhập.");
+                toast.success("Register successful. Please log in.");
                 setView('login');
             } else {
                 login(data.user, data.token);
+                toast.success(`Welcome back, ${data.user.fullName}!`);
             }
-        } catch (err) { setError(err.message); }
+        } catch (err) { toast.error(err.message || "Login failed"); }
         setLoading(false);
     };
 
@@ -135,7 +139,7 @@ const AuthModal = () => {
             const data = await res.json();
             if (!res.ok) throw new Error(data.message);
             
-            alert("Đổi mật khẩu thành công! Hãy đăng nhập lại.");
+            toast.success("Password reset successful! Please log in again.");
             setView('login');
             resetForm();
         } catch (err) { setError(err.message); }

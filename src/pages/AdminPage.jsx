@@ -6,7 +6,9 @@ import UserTable from '../components/admin/UserTable';
 import CommentTable from '../components/admin/CommentTable';
 import ReportTable from '../components/admin/ReportTable';
 import useDocumentTitle from '../hooks/useDocumentTitle';
-import { API_BASE_URL } from '../api/config';
+import ConfirmModal from '../components/common/ConfirmModal';
+import { useToast } from '../context/ToastContext';
+import { API_BASE_URL } from '../../src/api/config';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -14,6 +16,7 @@ const AdminPage = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
+    const toast = useToast();
     
     const [activeTab, setActiveTab] = useState('users');
     const [accounts, setAccounts] = useState([]);
@@ -21,59 +24,114 @@ const AdminPage = () => {
     const [videoReports, setVideoReports] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
-    useDocumentTitle('Admin Dashboard');
+    const [confirmDialog, setConfirmDialog] = useState({
+        isOpen: false,
+        title: "",
+        message: "",
+        onConfirm: null
+    });
+
+    useDocumentTitle('Admin Dashboard - MoiMovies');
 
     useEffect(() => {
         if (user && user.role !== 'ADMIN') {
-            alert("You do not have permission to access this page!");
+            toast.error("You do not have permission to access this page!");
             navigate('/');
         }
     }, [user]);
 
     const fetchData = async () => {
         try {
-            // Users
             const resAccounts = await fetch(`${API_BASE_URL}/api/admin/accounts`, { headers: { 'Authorization': `Bearer ${token}` } });
             const dataAccounts = await resAccounts.json();
             if (dataAccounts.data) setAccounts(dataAccounts.data);
 
-            // Reported Comments
             const resReports = await fetch(`${API_BASE_URL}/api/comments/admin/reported`, { headers: { 'Authorization': `Bearer ${token}` } });
             const dataReports = await resReports.json();
             if (dataReports.data) setReportedComments(dataReports.data);
 
-            // Video Reports (Mới)
             const resVideoReports = await fetch(`${API_BASE_URL}/api/reports/admin`, { headers: { 'Authorization': `Bearer ${token}` } });
             const dataVideoReports = await resVideoReports.json();
             if (dataVideoReports.data) setVideoReports(dataVideoReports.data);
-
         } catch (error) { console.error(error); }
     };
 
     useEffect(() => { fetchData(); }, []);
     useEffect(() => { setCurrentPage(1); }, [activeTab]);
 
-    const handleDeleteUser = async (id) => {
-        if(!window.confirm("Delete this account?")) return;
-        await fetch(`${API_BASE_URL}/api/admin/accounts/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
-        fetchData();
+    // --- XÓA TÀI KHOẢN ---
+    const executeDeleteUser = async (id) => {
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/admin/accounts/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+            if (res.ok) {
+                toast.success("Delete successful.");
+                fetchData();
+            } else toast.error("Error deleting user.");
+        } catch (e) { toast.error("Connection error."); }
+        setConfirmDialog({ ...confirmDialog, isOpen: false });
     };
-    const handleDeleteComment = async (id) => {
-        if(!window.confirm("Delete this comment?")) return;
-        await fetch(`${API_BASE_URL}/api/comments/admin/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
-        fetchData();
+
+    const handleDeleteUser = (id) => {
+        setConfirmDialog({
+            isOpen: true,
+            title: "Delete user?",
+            message: "This action will permanently delete the user account and related data. Are you sure?",
+            onConfirm: () => executeDeleteUser(id)
+        });
     };
+
+    // --- XÓA BÌNH LUẬN ---
+    const executeDeleteComment = async (id) => {
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/comments/admin/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+            if (res.ok) {
+                toast.success("Comment deleted.");
+                fetchData();
+            }
+        } catch (e) { console.error(e); }
+        setConfirmDialog({ ...confirmDialog, isOpen: false });
+    };
+
+    const handleDeleteComment = (id) => {
+        setConfirmDialog({
+            isOpen: true,
+            title: "Delete comment?",
+            message: "Are you sure you want to delete this comment from the system?",
+            onConfirm: () => executeDeleteComment(id)
+        });
+    };
+    // --- BỎ QUA BÁO CÁO BÌNH LUẬN ---
     const handleDismissReport = async (id) => {
         await fetch(`${API_BASE_URL}/api/comments/admin/${id}/dismiss`, { method: 'PUT', headers: { 'Authorization': `Bearer ${token}` } });
-        fetchData();
-    };
-    const handleResolveVideo = async (id) => {
-        if(!confirm("Confirm error resolved?")) return;
-        await fetch(`${API_BASE_URL}/api/reports/admin/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+        toast.info("Report dismissed.");
         fetchData();
     };
 
-    // Phân trang
+    // --- BÁO LỖI PHIM ---
+    const executeResolveVideo = async (id) => {
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/reports/admin/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if(res.ok) {
+                toast.success("Issue resolved confirmed.");
+                fetchData();
+            }
+        } catch (e) { console.error(e); }
+        setConfirmDialog({ ...confirmDialog, isOpen: false });
+    };
+
+    const handleResolveVideo = (id) => {
+        setConfirmDialog({
+            isOpen: true,
+            title: "Confirm issue resolution?",
+            message: "Do you confirm that the issue with this video has been fixed and want to delete the report?",
+            onConfirm: () => executeResolveVideo(id)
+        });
+    };
+
+    // Logic Phân trang
     let currentData = [];
     if (activeTab === 'users') currentData = accounts;
     else if (activeTab === 'comments') currentData = reportedComments;
@@ -84,7 +142,6 @@ const AdminPage = () => {
 
     return (
         <div className="pt-20 min-h-screen bg-[#121212] text-white flex">
-            {/* SIDEBAR */}
             <AdminSidebar 
                 activeTab={activeTab} 
                 setActiveTab={setActiveTab} 
@@ -92,14 +149,11 @@ const AdminPage = () => {
                 videoReportCount={videoReports.length}
             />
 
-            {/* CONTENT */}
             <div className="flex-1 ml-64 p-8 relative min-h-[calc(100vh-80px)] flex flex-col">
                 
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold text-white uppercase">
-                        {activeTab === 'users' && 'User List'}
-                        {activeTab === 'comments' && 'Reported Comments'}
-                        {activeTab === 'video_reports' && 'Reported Movies'}
+                        {activeTab === 'users' ? 'Account List' : (activeTab === 'comments' ? 'Reported Comments' : 'Reported Videos')}
                     </h1>
                     <div className="bg-[#1f1f1f] px-4 py-2 rounded-lg border border-gray-700">
                         <span className="text-gray-400 text-sm mr-2">Total:</span>
@@ -107,7 +161,6 @@ const AdminPage = () => {
                     </div>
                 </div>
 
-                {/* TABLE */}
                 <div className="flex-1">
                     {activeTab === 'users' && (
                         <UserTable users={currentItems} onDelete={handleDeleteUser} />
@@ -127,7 +180,6 @@ const AdminPage = () => {
                     )}
                 </div>
 
-                {/* PAGINATION */}
                 {totalPages > 1 && (
                     <div className="flex justify-end mt-auto pt-6 space-x-2">
                         {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
@@ -143,6 +195,14 @@ const AdminPage = () => {
                     </div>
                 )}
             </div>
+
+            <ConfirmModal 
+                isOpen={confirmDialog.isOpen}
+                title={confirmDialog.title}
+                message={confirmDialog.message}
+                onConfirm={confirmDialog.onConfirm}
+                onCancel={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
+            />
         </div>
     );
 };

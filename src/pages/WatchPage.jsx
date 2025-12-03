@@ -13,11 +13,13 @@ import {
     ExclamationCircleOutlined 
 } from '@ant-design/icons';
 import { API_BASE_URL } from '../../src/api/config';
+import { useToast } from '../context/ToastContext';
 
 const WatchPage = () => {
   const { type, id } = useParams();
   const { user, openModal } = useAuth();
   const token = localStorage.getItem('token');
+  const toast = useToast();
 
   const commentSectionRef = useRef(null);
 
@@ -113,7 +115,7 @@ const WatchPage = () => {
       if (currentIndex !== -1 && currentIndex < episodes.length - 1) {
           handleChangeEpisode(episodes[currentIndex + 1]);
       } else {
-          alert("This is the last episode!");
+          toast.error("This is the last episode!");
       }
   };
 
@@ -128,7 +130,7 @@ const WatchPage = () => {
               body: JSON.stringify({ movieId: key })
           });
           if (res.ok) setIsFavorite(!isFavorite);
-      } catch (e) { alert("Connection error"); }
+      } catch (e) { toast.error("Connection error"); }
   };
 
   const handleScrollToComment = () => {
@@ -156,8 +158,8 @@ const WatchPage = () => {
               })
           });
 
-          if (res.ok) alert("Thank you for reporting! Admin will review it soon.");
-          else alert("Failed to send report.");
+          if (res.ok) toast.success("Thank you for reporting! Admin will review it soon.");
+          else toast.error("Failed to send report.");
       } catch (e) {
           console.error(e);
       }
@@ -302,7 +304,7 @@ const WatchPage = () => {
                 {currentComments.length > 0 ? currentComments.map(cmt => (
                     <div key={cmt._id} className="bg-[#1a1a1a] p-4 rounded-lg flex gap-4 border-b border-gray-800">
                         <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-700 flex-shrink-0 mt-1">
-                            <img src={cmt.userId?.avatar || "https://via.placeholder.com/150"} className="w-full h-full object-cover"/>
+                            <img src={cmt.userId?.avatar || "https://animevietsub.show/statics/images/user-image.png"} className="w-full h-full object-cover"/>
                         </div>
                         <div>
                             <div className="flex items-center gap-2 mb-1">

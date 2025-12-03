@@ -138,7 +138,7 @@ const Header = () => {
                                     <div className="max-h-80 overflow-y-auto custom-scrollbar">
                                         {searchResults.map((movie) => (
                                             <div key={movie.id} onClick={() => { navigate(movie.media_type === 'tv' ? `/tv/${movie.id}` : `/movie/${movie.id}`); setShowSearch(false); setKeyword(''); }} className="flex items-start p-3 hover:bg-gray-800 cursor-pointer border-b border-gray-800/50 transition">
-                                                <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w92${movie.poster_path}` : 'https://via.placeholder.com/50x75'} className="w-10 h-14 object-cover rounded-md mr-3"/>
+                                                <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w92${movie.poster_path}` : 'https://placehold.co/50x75'} className="w-10 h-14 object-cover rounded-md mr-3"/>
                                                 <div><h4 className="text-white text-xs font-bold line-clamp-1">{movie.title || movie.name}</h4><p className="text-gray-500 text-[10px] mt-1">{movie.release_date?.substring(0, 4)}</p></div>
                                             </div>
                                         ))}
@@ -152,7 +152,7 @@ const Header = () => {
                         {user ? (
                             <div className="relative" ref={menuRef}>
                                 <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition" onClick={() => setShowUserMenu(!showUserMenu)}>
-                                    <img src={user.avatar || "https://via.placeholder.com/150"} className="w-10 h-10 rounded-full object-cover border-2 border-transparent hover:border-red-600 transition shadow-md"/>
+                                    <img src={user.avatar || "https://animevietsub.show/statics/images/user-image.png"} className="w-10 h-10 rounded-full object-cover border-2 border-transparent hover:border-red-600 transition shadow-md"/>
                                     <FaCaretDown className="text-white text-xs" />
                                 </div>
                                 {showUserMenu && (
@@ -179,12 +179,12 @@ const Header = () => {
             
             {/* MOBILE HEADER */}
             <div className="md:hidden bg-black text-white py-4 border-b border-gray-700 fixed top-0 left-0 right-0 z-50 px-4 flex justify-between items-center">
-                <Link to="/" className="text-xl font-bold tracking-wide text-red-600">tMovies</Link>
+                <Link to="/" className="text-xl font-bold tracking-wide text-red-600">MoiMovies</Link>
                 <FaSearch className="text-lg" onClick={() => navigate('/movie')} />
             </div>
             <div className="fixed bottom-0 left-0 w-full bg-black/95 backdrop-blur-sm border-t border-gray-800 flex justify-around py-3 text-white md:hidden z-50">
                 {headerNav.map((e, i) => ( <Link key={i} to={e.path} className={`flex flex-col items-center text-[10px] ${pathname === e.path ? 'text-red-500' : 'text-gray-400'}`}><span className="font-bold text-lg">{i===0?'🏠':i===1?'🎬':'📺'}</span><span>{e.display}</span></Link> ))}
-                {user ? ( <Link to="/profile" className="flex flex-col items-center text-[10px] text-gray-400"><img src={user.avatar || "https://via.placeholder.com/150"} className="w-6 h-6 rounded-full mb-1 object-cover"/><span>Me</span></Link> ) : ( <button onClick={() => openModal('login')} className="flex flex-col items-center text-[10px] text-gray-400"><FaUserCircle className="text-xl mb-1" /><span>Login</span></button> )}
+                {user ? ( <Link to="/profile" className="flex flex-col items-center text-[10px] text-gray-400"><img src={user.avatar || "https://animevietsub.show/statics/images/user-image.png"} className="w-6 h-6 rounded-full mb-1 object-cover"/><span>Me</span></Link> ) : ( <button onClick={() => openModal('login')} className="flex flex-col items-center text-[10px] text-gray-400"><FaUserCircle className="text-xl mb-1" /><span>Login</span></button> )}
             </div>
         </>
     );

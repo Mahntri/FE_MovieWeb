@@ -18,7 +18,7 @@ const CommentTable = ({ comments, onDelete, onDismiss }) => {
                 
                 {/* Avatar */}
                 <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-700 flex-shrink-0">
-                    <img src={cmt.userId?.avatar || "https://via.placeholder.com/150"} className="w-full h-full object-cover" alt="user"/>
+                    <img src={cmt.userId?.avatar || "https://animevietsub.show/statics/images/user-image.png"} className="w-full h-full object-cover" alt="user"/>
                 </div>
 
                 {/* Nội dung */}

@@ -47,7 +47,7 @@ const PersonPage = () => {
           <div className="w-full md:w-1/3 lg:w-1/4 flex flex-col items-center md:items-start">
             <div className="w-64 rounded-xl overflow-hidden shadow-2xl border border-gray-800 mb-6">
               <img 
-                src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : 'https://via.placeholder.com/300x450'} 
+                src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : 'https://placehold.co/300x450'} 
                 alt={person.name} 
                 className="w-full h-full object-cover"
               />
