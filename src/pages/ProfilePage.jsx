@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { UploadOutlined, UserOutlined } from '@ant-design/icons';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import { API_BASE_URL } from '../api/config';
 
 const ProfilePage = () => {
     const { user, login } = useAuth();
@@ -49,7 +50,7 @@ const ProfilePage = () => {
             if (formData.password) data.append('password', formData.password);
             if (selectedFile) data.append('avatar', selectedFile);
 
-            const res = await fetch('/api/user/update', {
+            const res = await fetch(`${API_BASE_URL}/api/user/update`, {
                 method: 'PUT',
                 headers: { 
                     'Authorization': `Bearer ${token}`
