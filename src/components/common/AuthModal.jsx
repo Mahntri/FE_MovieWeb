@@ -83,20 +83,29 @@ const AuthModal = () => {
     // Gửi Email
     const handleSendOtp = async (e) => {
         if(e) e.preventDefault();
-        setError(''); setLoading(true);
+        setError(''); 
+        setLoading(true);
         try {
             const res = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: formData.email })
             });
+            
             const data = await res.json();
+            
+            // Nếu Backend trả về 200 (như code trên), dòng này sẽ qua
             if (!res.ok) throw new Error(data.message);
             
+            // 👇 Frontend nhận tín hiệu thành công -> Chuyển sang màn hình OTP
+            // Lúc này đồng hồ 60s sẽ tự chạy (do logic useEffect timer)
+            alert(data.message); // Hiện thông báo "Gửi OTP thành công..."
             setForgotStep(2);
             setTimer(60);
             setCanResend(false);
-        } catch (err) { setError(err.message); }
+        } catch (err) { 
+            setError(err.message); 
+        }
         setLoading(false);
     };
 
