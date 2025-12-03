@@ -16,7 +16,7 @@ const AdminSidebar = ({ activeTab, setActiveTab, reportCount, videoReportCount }
             className={`w-full text-left px-6 py-4 flex items-center gap-3 transition-colors ${activeTab === 'users' ? 'bg-red-600/10 text-red-500 border-r-4 border-red-500' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}`}
         >
             <UserOutlined className="text-lg" />
-            <span className="font-semibold">Quản lý tài khoản</span>
+            <span className="font-semibold">User Management</span>
         </button>
 
         {/* Nút Bình luận báo cáo */}
@@ -25,7 +25,7 @@ const AdminSidebar = ({ activeTab, setActiveTab, reportCount, videoReportCount }
             className={`w-full text-left px-6 py-4 flex items-center gap-3 transition-colors ${activeTab === 'comments' ? 'bg-red-600/10 text-red-500 border-r-4 border-red-500' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}`}
         >
             <WarningOutlined className="text-lg" />
-            <span className="font-semibold">Bình luận báo cáo</span>
+            <span className="font-semibold">Reported Comments</span>
             {reportCount > 0 && (
                 <span className="ml-auto bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">
                     {reportCount}
@@ -39,7 +39,7 @@ const AdminSidebar = ({ activeTab, setActiveTab, reportCount, videoReportCount }
             className={`w-full text-left px-6 py-4 flex items-center gap-3 transition-colors ${activeTab === 'video_reports' ? 'bg-red-600/10 text-red-500 border-r-4 border-red-500' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}`}
         >
             <BugOutlined className="text-lg" />
-            <span className="font-semibold">Phim báo lỗi</span>
+            <span className="font-semibold">Video Error Reports</span>
             {videoReportCount > 0 && (
                 <span className="ml-auto bg-yellow-600 text-white text-xs px-2 py-0.5 rounded-full">
                     {videoReportCount}

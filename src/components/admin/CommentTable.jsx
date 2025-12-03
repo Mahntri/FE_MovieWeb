@@ -6,7 +6,7 @@ const CommentTable = ({ comments, onDelete, onDismiss }) => {
     return (
         <div className="text-center py-20 text-gray-500 bg-[#1f1f1f] rounded-xl border border-gray-800">
             <CheckCircleOutlined className="text-4xl mb-2 text-green-500"/>
-            <p>Tuyệt vời! Không có bình luận nào bị báo cáo.</p>
+            <p>Great! There are no reported comments.</p>
         </div>
     );
   }
@@ -44,14 +44,14 @@ const CommentTable = ({ comments, onDelete, onDismiss }) => {
                         className="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs font-bold transition shadow-md flex items-center gap-1"
                         title="Bỏ qua"
                     >
-                        <CheckCircleOutlined /> <span className="hidden md:inline">Bỏ qua</span>
+                        <CheckCircleOutlined /> <span className="hidden md:inline">Dismiss</span>
                     </button>
                     <button 
                         onClick={() => onDelete(cmt._id)}
                         className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-bold transition shadow-md flex items-center gap-1"
                         title="Xóa bỏ"
                     >
-                        <DeleteOutlined /> <span className="hidden md:inline">Xóa</span>
+                        <DeleteOutlined /> <span className="hidden md:inline">Delete</span>
                     </button>
                 </div>
             </div>

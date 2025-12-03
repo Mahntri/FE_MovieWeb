@@ -37,7 +37,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       
       {/* Hiển thị thông tin trang */}
       <div className="bg-gray-900 text-gray-400 font-semibold px-4 py-2 rounded-md border border-gray-700">
-        Trang <span className="text-white font-bold">{currentPage}</span> của <span className="text-white font-bold">{totalPages}</span>
+        Page <span className="text-white font-bold">{currentPage}</span> of <span className="text-white font-bold">{totalPages}</span>
       </div>
 
       {/* Các nút điều hướng */}
@@ -49,7 +49,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                 onClick={() => onPageChange(1)} 
                 className="px-4 py-2 bg-gray-900 text-gray-400 font-semibold rounded-md border border-gray-700 hover:bg-gray-700 hover:text-white transition"
             >
-                Trang Đầu
+                First Page
             </button>
         )}
 
@@ -61,7 +61,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             onClick={() => onPageChange(totalPages)}
             className="px-4 py-2 bg-gray-900 text-gray-400 font-semibold rounded-md border border-gray-700 hover:bg-gray-700 hover:text-white transition"
           >
-            Trang Cuối
+            Last Page
           </button>
         )}
       </div>

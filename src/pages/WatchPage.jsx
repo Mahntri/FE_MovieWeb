@@ -79,7 +79,7 @@ const WatchPage = () => {
                 throw new Error("No data");
             }
         } catch (error) {
-            console.log("Chuyển sang nguồn dự phòng...");
+            console.log("Switching to the backup source...");
             setEmbedUrl(backupEmbed);
             setEpisodes([]);
             setIsBackup(true);
@@ -113,7 +113,7 @@ const WatchPage = () => {
       if (currentIndex !== -1 && currentIndex < episodes.length - 1) {
           handleChangeEpisode(episodes[currentIndex + 1]);
       } else {
-          alert("Đây là tập cuối rồi!");
+          alert("This is the last episode!");
       }
   };
 
@@ -128,7 +128,7 @@ const WatchPage = () => {
               body: JSON.stringify({ movieId: key })
           });
           if (res.ok) setIsFavorite(!isFavorite);
-      } catch (e) { alert("Lỗi kết nối"); }
+      } catch (e) { alert("Connection error"); }
   };
 
   const handleScrollToComment = () => {
@@ -138,7 +138,7 @@ const WatchPage = () => {
   const handleReportVideo = async () => {
       if (!user) return openModal('login');
 
-      const description = prompt("Mô tả lỗi bạn gặp phải (Ví dụ: Mất tiếng, sai phụ đề...):");
+      const description = prompt("Describe the issue you encountered (e.g., no sound, incorrect subtitles):");
       if (!description) return;
 
       try {
@@ -156,8 +156,8 @@ const WatchPage = () => {
               })
           });
 
-          if (res.ok) alert("Cảm ơn bạn đã báo lỗi! Admin sẽ kiểm tra sớm.");
-          else alert("Gửi báo cáo thất bại.");
+          if (res.ok) alert("Thank you for reporting! Admin will review it soon.");
+          else alert("Failed to send report.");
       } catch (e) {
           console.error(e);
       }
@@ -212,7 +212,7 @@ const WatchPage = () => {
                 disabled={episodes.length <= 1}
                 className="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 rounded-lg font-bold transition"
             >
-                <StepForwardOutlined /> Tập tiếp
+                <StepForwardOutlined /> Next Episode
             </button>
             
             <button 
@@ -220,21 +220,21 @@ const WatchPage = () => {
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition border border-gray-600
                     ${isFavorite ? 'bg-red-600 text-white border-red-600' : 'bg-transparent hover:bg-gray-700'}`}
             >
-                {isFavorite ? <HeartFilled /> : <HeartOutlined />} Yêu thích
+                {isFavorite ? <HeartFilled /> : <HeartOutlined />} Add to Watchlist
             </button>
 
             <button 
                 onClick={handleScrollToComment}
                 className="flex items-center gap-2 bg-transparent hover:bg-gray-700 border border-gray-600 px-4 py-2 rounded-lg font-bold transition"
             >
-                <MessageOutlined /> Bình luận
+                <MessageOutlined /> Comments
             </button>
 
             <button 
                 onClick={handleReportVideo}
                 className="flex items-center gap-2 bg-transparent hover:bg-yellow-900/30 text-yellow-500 border border-yellow-600/50 px-4 py-2 rounded-lg font-bold transition ml-auto"
             >
-                <ExclamationCircleOutlined /> Báo lỗi
+                <ExclamationCircleOutlined /> Report
             </button>
         </div>
 
@@ -242,7 +242,7 @@ const WatchPage = () => {
         {isBackup && (
             <div className="mb-6 p-3 bg-yellow-900/30 border border-yellow-700/50 rounded-lg text-yellow-200 flex items-center gap-3 text-sm">
                 <WarningOutlined />
-                <span>Đang phát từ nguồn dự phòng (Không có danh sách tập).</span>
+                <span>Playing from backup source (No episode list available).</span>
             </div>
         )}
 
@@ -250,7 +250,7 @@ const WatchPage = () => {
         {episodes.length > 0 && (
             <div className="mb-10 bg-[#1f1f1f] p-6 rounded-xl border border-gray-700">
                 <h3 className="text-lg font-bold mb-4 text-gray-300 border-b border-gray-700 pb-2">
-                    Danh sách tập ({serverName || 'Vietsub'})
+                    Episode List ({serverName || 'Vietsub'})
                 </h3>
                 <div className="flex flex-wrap gap-2 max-h-60 overflow-y-auto custom-scrollbar">
                     {episodes.map((ep) => (
@@ -322,7 +322,7 @@ const WatchPage = () => {
                         onClick={handleLoadMoreComments}
                         className="w-full bg-red-800 hover:bg-red-700 text-white font-bold py-3 rounded shadow-lg transition duration-300 ease-in-out uppercase tracking-wide"
                     >
-                        Tải thêm 10 bình luận
+                        Load More Comments
                     </button>
                 </div>
             )}

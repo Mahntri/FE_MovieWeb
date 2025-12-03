@@ -18,7 +18,7 @@ const ProfilePage = () => {
     const [previewImage, setPreviewImage] = useState('');
     const [loading, setLoading] = useState(false);
 
-    useDocumentTitle('Quản lý tài khoản - MoiMovies');
+    useDocumentTitle('Profile - MoiMovies');
 
     useEffect(() => {
         if (user) {
@@ -88,12 +88,12 @@ const ProfilePage = () => {
 
                 {/* FORM CẬP NHẬT */}
                 <div className="col-span-2 bg-[#1f1f1f] p-8 rounded-xl border border-gray-800 shadow-lg">
-                    <h3 className="text-2xl font-bold mb-6 border-b border-gray-700 pb-4">THÔNG TIN TÀI KHOẢN</h3>
+                    <h3 className="text-2xl font-bold mb-6 border-b border-gray-700 pb-4">PROFILE</h3>
                     
                     <form onSubmit={handleUpdate} className="space-y-6">
                         {/* Username */}
                         <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4">
-                            <label className="text-gray-400 font-semibold">Tài khoản</label>
+                            <label className="text-gray-400 font-semibold">Username</label>
                             <div className="md:col-span-2">
                                 <input 
                                     type="text" 
@@ -106,7 +106,7 @@ const ProfilePage = () => {
 
                         {/* Fullname */}
                         <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4">
-                            <label className="text-gray-400 font-semibold">Họ tên</label>
+                            <label className="text-gray-400 font-semibold">Full Name</label>
                             <div className="md:col-span-2">
                                 <input 
                                     type="text" 
@@ -119,11 +119,11 @@ const ProfilePage = () => {
 
                         {/* Password */}
                         <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4">
-                            <label className="text-gray-400 font-semibold">Mật khẩu mới</label>
+                            <label className="text-gray-400 font-semibold">New Password</label>
                             <div className="md:col-span-2">
                                 <input 
                                     type="password" 
-                                    placeholder="Để trống nếu không muốn đổi"
+                                    placeholder="Leave blank if you don't want to change"
                                     value={formData.password}
                                     onChange={(e) => setFormData({...formData, password: e.target.value})}
                                     className="w-full bg-[#2a2a2a] text-white border border-gray-600 rounded p-3 focus:border-red-500 outline-none transition"
@@ -136,11 +136,11 @@ const ProfilePage = () => {
                             <label className="text-gray-400 font-semibold">Avatar</label>
                             <div className="md:col-span-2 flex items-center gap-4">
                                 <label className="cursor-pointer bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded transition flex items-center gap-2">
-                                    <UploadOutlined /> Chọn tệp
+                                    <UploadOutlined /> Choose File
                                     <input type="file" hidden onChange={handleFileChange} accept="image/*" />
                                 </label>
                                 <span className="text-sm text-gray-500 italic">
-                                    {selectedFile ? selectedFile.name : "Chưa có tệp nào được chọn"}
+                                    {selectedFile ? selectedFile.name : "No file chosen"}
                                 </span>
                             </div>
                         </div>
@@ -152,7 +152,7 @@ const ProfilePage = () => {
                                 disabled={loading}
                                 className="bg-yellow-600 hover:bg-yellow-500 text-black font-bold px-8 py-3 rounded transition w-full md:w-auto disabled:opacity-50"
                             >
-                                {loading ? "Đang cập nhật..." : "CẬP NHẬT"}
+                                {loading ? "Updating..." : "UPDATE"}
                             </button>
                         </div>
                     </form>

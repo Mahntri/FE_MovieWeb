@@ -18,7 +18,7 @@ const WatchlistPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const page = parseInt(searchParams.get('page')) || 1;
 
-    useDocumentTitle('Tủ phim của tôi - MoiMovies');
+    useDocumentTitle('My Watchlist - MoiMovies');
     
     const fetchFavorites = async () => {
         setLoading(true);

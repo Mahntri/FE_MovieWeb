@@ -25,7 +25,7 @@ const AdminPage = () => {
 
     useEffect(() => {
         if (user && user.role !== 'ADMIN') {
-            alert("Bạn không có quyền truy cập trang này!");
+            alert("You do not have permission to access this page!");
             navigate('/');
         }
     }, [user]);
@@ -54,12 +54,12 @@ const AdminPage = () => {
     useEffect(() => { setCurrentPage(1); }, [activeTab]);
 
     const handleDeleteUser = async (id) => {
-        if(!window.confirm("Xóa tài khoản này?")) return;
+        if(!window.confirm("Delete this account?")) return;
         await fetch(`${API_BASE_URL}/api/admin/accounts/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
         fetchData();
     };
     const handleDeleteComment = async (id) => {
-        if(!window.confirm("Xóa bình luận này?")) return;
+        if(!window.confirm("Delete this comment?")) return;
         await fetch(`${API_BASE_URL}/api/comments/admin/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
         fetchData();
     };
@@ -68,7 +68,7 @@ const AdminPage = () => {
         fetchData();
     };
     const handleResolveVideo = async (id) => {
-        if(!confirm("Xác nhận đã khắc phục lỗi này?")) return;
+        if(!confirm("Confirm error resolved?")) return;
         await fetch(`${API_BASE_URL}/api/reports/admin/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
         fetchData();
     };
@@ -97,12 +97,12 @@ const AdminPage = () => {
                 
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold text-white uppercase">
-                        {activeTab === 'users' && 'Danh sách thành viên'}
-                        {activeTab === 'comments' && 'Bình luận báo cáo'}
-                        {activeTab === 'video_reports' && 'Phim bị báo lỗi'}
+                        {activeTab === 'users' && 'User List'}
+                        {activeTab === 'comments' && 'Reported Comments'}
+                        {activeTab === 'video_reports' && 'Reported Movies'}
                     </h1>
                     <div className="bg-[#1f1f1f] px-4 py-2 rounded-lg border border-gray-700">
-                        <span className="text-gray-400 text-sm mr-2">Tổng số:</span>
+                        <span className="text-gray-400 text-sm mr-2">Total:</span>
                         <span className="text-xl font-bold text-red-500">{currentData.length}</span>
                     </div>
                 </div>

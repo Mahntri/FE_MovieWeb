@@ -12,6 +12,11 @@ import { useAuth } from '../context/AuthContext';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 import { API_BASE_URL } from '../../src/api/config';
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { FreeMode } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/free-mode';
+
 const MovieDetailPage = () => {
   const { type, id } = useParams();
   
@@ -221,6 +226,15 @@ const MovieDetailPage = () => {
       setVisibleComments(prev => prev + 10);
   };
 
+  const swiperConfig = {
+      modules: [FreeMode],
+      freeMode: true,
+      grabCursor: true,
+      slidesPerView: "auto",
+      spaceBetween: 16, // Khoảng cách giữa các ảnh
+      className: "w-full"
+  };
+
   return (
     <div className="text-white bg-gray-900 min-h-screen pb-20">
       
@@ -266,7 +280,19 @@ const MovieDetailPage = () => {
             </p>
             
             <div className="flex flex-wrap gap-4">
-                <button onClick={() => checkAuth(handleToggleFavorite)} className={`px-6 py-3 rounded-full font-bold text-base md:text-lg transition shadow-lg border-2 flex items-center gap-2 ${isFavorite ? 'bg-white text-red-600 border-white' : 'bg-black/40 text-white border-white hover:bg-white hover:text-black'}`}>{isFavorite ? <HeartFilled /> : <HeartOutlined />} {isFavorite ? 'Added' : 'Add to Favorites'}</button>
+                <button 
+                    onClick={() => checkAuth(handleToggleFavorite)} 
+                    className={`
+                        px-6 py-3 rounded-full font-bold text-base md:text-lg border-2 border-white flex items-center gap-2 transition-all duration-300 ease-in-out
+                        ${isFavorite 
+                        ? 'bg-white text-red-600 hover:bg-gray-200' 
+                        : 'bg-white/10 backdrop-blur-sm border border-white text-white hover:bg-white hover:text-black px-8 py-3 rounded-full font-bold text-lg transition shadow-lg'
+                        }
+                    `}
+                    >
+                    {isFavorite ? <HeartFilled /> : <HeartOutlined />} 
+                    {isFavorite ? 'Added' : 'Add to Watchlist'}
+                </button>
                 <button onClick={() => navigate(`/watch/${type}/${id}`)} className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full font-bold text-base md:text-lg transition shadow-lg hover:shadow-red-600/40 flex items-center gap-2"><PlayCircleOutlined /> Watch Now</button>
                 <button onClick={() => { if (trailer) setShowTrailer(true); else alert("Trailer not available"); }} className="bg-white text-black hover:bg-gray-200 px-6 py-3 rounded-full font-bold text-base md:text-lg transition shadow-lg flex items-center gap-2"><YoutubeFilled className="text-red-600 text-xl" /> Trailer</button>
             </div>
@@ -307,8 +333,39 @@ const MovieDetailPage = () => {
 
         {/* TRAILER & IMAGES */}
         {trailer && (<div><h2 className="text-2xl font-semibold mb-6 border-l-4 border-red-500 pl-3">Official Trailer</h2><div className="aspect-video w-full max-w-5xl mx-auto bg-black rounded-xl overflow-hidden shadow-2xl border border-gray-800"><iframe className="w-full h-full" src={`https://www.youtube.com/embed/${trailer.key}`} title="Trailer" frameBorder="0" allowFullScreen/></div></div>)}
-        {backdrops.length > 0 && (<div><h2 className="text-2xl font-semibold mb-6 border-l-4 border-red-500 pl-3">Backdrops</h2><div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700">{backdrops.map((img, i) => (<img key={i} src={`https://image.tmdb.org/t/p/w500${img.file_path}`} alt="Backdrop" className="h-40 md:h-52 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-300"/>))}</div></div>)}
-        {posters.length > 0 && (<div><h2 className="text-2xl font-semibold mb-6 border-l-4 border-red-500 pl-3">Posters</h2><div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700">{posters.map((img, i) => (<img key={i} src={`https://image.tmdb.org/t/p/w300${img.file_path}`} alt="Poster" className="h-52 md:h-64 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-300"/>))}</div></div>)}
+        {backdrops.length > 0 && (
+            <div>
+                <h2 className="text-2xl font-semibold mb-6 border-l-4 border-red-500 pl-3">Backdrops</h2>
+                <Swiper {...swiperConfig}>
+                    {backdrops.map((img, i) => (
+                        <SwiperSlide key={i} className="!w-auto"> {/* !w-auto: Width tự tính theo chiều cao ảnh */}
+                            <img 
+                                src={`https://image.tmdb.org/t/p/w500${img.file_path}`} 
+                                alt="Backdrop" 
+                                className="h-40 md:h-52 rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 select-none"
+                            />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </div>
+        )}
+        
+        {posters.length > 0 && (
+            <div>
+                <h2 className="text-2xl font-semibold mb-6 border-l-4 border-red-500 pl-3">Posters</h2>
+                <Swiper {...swiperConfig}>
+                    {posters.map((img, i) => (
+                        <SwiperSlide key={i} className="!w-auto">
+                            <img 
+                                src={`https://image.tmdb.org/t/p/w300${img.file_path}`} 
+                                alt="Poster" 
+                                className="h-52 md:h-64 rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 select-none"
+                            />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </div>
+        )}
         
         {/* COMMENTS */}
         <div className="max-w-4xl mx-auto mt-16">
@@ -318,14 +375,14 @@ const MovieDetailPage = () => {
                 </h2>
                 {/* Dropdown */}
                 <div className="flex items-center gap-3">
-                    <span className="text-gray-400 text-sm hidden sm:block">Sắp xếp theo:</span>
+                    <span className="text-gray-400 text-sm hidden sm:block">Arrange:</span>
                     <select
                         value={sortOrder}
                         onChange={(e) => setSortOrder(e.target.value)}
                         className="bg-[#1f1f1f] text-white text-sm border border-gray-700 rounded px-3 py-1.5 focus:outline-none focus:border-red-600 transition cursor-pointer"
                     >
-                        <option value="desc">Mới nhất</option>
-                        <option value="asc">Cũ nhất</option>
+                        <option value="desc">Newest</option>
+                        <option value="asc">Oldest</option>
                     </select>
                 </div>
             </div>
@@ -366,7 +423,7 @@ const MovieDetailPage = () => {
                         onClick={handleLoadMoreComments}
                         className="w-full bg-red-800 hover:bg-red-700 text-white font-bold py-3 rounded shadow-lg transition duration-300 ease-in-out uppercase tracking-wide"
                     >
-                        Tải thêm 10 bình luận
+                        Load More Comments
                     </button>
                 </div>
             )}

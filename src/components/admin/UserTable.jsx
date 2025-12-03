@@ -9,8 +9,8 @@ const UserTable = ({ users, onDelete }) => {
                 <tr>
                     <th className="p-4">Username</th>
                     <th className="p-4">Role</th>
-                    <th className="p-4">Ngày tham gia</th>
-                    <th className="p-4 text-right">Hành động</th>
+                    <th className="p-4">Joined Date</th>
+                    <th className="p-4 text-right">Actions</th>
                 </tr>
             </thead>
             <tbody className="divide-y divide-gray-800">
@@ -29,14 +29,14 @@ const UserTable = ({ users, onDelete }) => {
                                     onClick={() => onDelete(acc._id)} 
                                     className="bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded text-sm transition"
                                 >
-                                    <DeleteOutlined /> Xóa
+                                    <DeleteOutlined /> Delete
                                 </button>
                             )}
                         </td>
                     </tr>
                 ))}
                 {users.length === 0 && (
-                    <tr><td colSpan="4" className="p-10 text-center text-gray-500">Không có dữ liệu.</td></tr>
+                    <tr><td colSpan="4" className="p-10 text-center text-gray-500">No data available.</td></tr>
                 )}
             </tbody>
         </table>

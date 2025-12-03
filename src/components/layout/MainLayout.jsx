@@ -4,6 +4,7 @@ import Header from '../common/Header';
 import Footer from '../common/Footer';
 import AuthModal from '../common/AuthModal';
 import { useAuth } from '../../context/AuthContext';
+import BackToTop from '../common/BackToTop';
 
 const MainLayout = () => {
   const { isModalOpen } = useAuth();
@@ -20,6 +21,8 @@ const MainLayout = () => {
       </div>
 
       {!isAdminPage && <Footer />}
+
+      <BackToTop />
 
       {/* Popup Đăng nhập/Đăng ký */}
       {isModalOpen && <AuthModal />}

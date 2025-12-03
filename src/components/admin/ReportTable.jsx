@@ -6,7 +6,7 @@ const ReportTable = ({ reports, onResolve }) => {
     return (
         <div className="text-center py-20 text-gray-500 bg-[#1f1f1f] rounded-xl border border-gray-800">
             <CheckCircleOutlined className="text-4xl mb-2 text-green-500"/>
-            <p>Hệ thống hoạt động tốt! Không có báo lỗi nào.</p>
+            <p>The system is running smoothly! No error reports found.</p>
         </div>
     );
   }
@@ -37,10 +37,10 @@ const ReportTable = ({ reports, onResolve }) => {
                     
                     <div className="flex items-center gap-2 mt-0.5">
                         <span className="text-red-400 text-sm font-medium truncate max-w-[300px]" title={item.description}>
-                            Lỗi: "{item.description}"
+                            Error: "{item.description}"
                         </span>
                         <span className="text-[10px] text-gray-500 hidden md:inline-block">
-                            • Báo bởi: {item.userId?.username || "Unknown"}
+                            • Reported by: {item.userId?.username || "Unknown"}
                         </span>
                         <span className="text-[10px] text-gray-500 hidden md:inline-block">
                             • ID: {item.mediaId}
@@ -52,9 +52,9 @@ const ReportTable = ({ reports, onResolve }) => {
                 <button 
                     onClick={() => onResolve(item._id)}
                     className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-bold transition shadow-md flex items-center gap-1 flex-shrink-0"
-                    title="Xác nhận đã sửa lỗi"
+                    title="Confirm error resolved"
                 >
-                    <CheckCircleOutlined /> <span className="hidden md:inline">Đã sửa</span>
+                    <CheckCircleOutlined /> <span className="hidden md:inline">Resolved</span>
                 </button>
             </div>
         ))}
