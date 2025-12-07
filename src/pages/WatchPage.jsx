@@ -14,6 +14,7 @@ import {
 } from '@ant-design/icons';
 import { API_BASE_URL } from '../../src/api/config';
 import { useToast } from '../context/ToastContext';
+import ReportModal from '../components/common/ReportModal';
 
 const WatchPage = () => {
   const { type, id } = useParams();
@@ -36,6 +37,7 @@ const WatchPage = () => {
   const [visibleComments, setVisibleComments] = useState(10);
   const [newComment, setNewComment] = useState('');
   const [commentLoading, setCommentLoading] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -137,12 +139,12 @@ const WatchPage = () => {
       commentSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleReportVideo = async () => {
+  const handleReportClick = () => {
       if (!user) return openModal('login');
+      setShowReportModal(true);
+  };
 
-      const description = prompt("Describe the issue you encountered (e.g., no sound, incorrect subtitles):");
-      if (!description) return;
-
+  const handleSubmitReport = async (description) => {
       try {
           const res = await fetch(`${API_BASE_URL}/api/reports`, {
               method: 'POST',
@@ -154,12 +156,12 @@ const WatchPage = () => {
                   mediaId: id, 
                   mediaType: type, 
                   title: movieInfo?.title || movieInfo?.name || "Unknown", 
-                  description 
+                  description
               })
           });
 
-          if (res.ok) toast.success("Thank you for reporting! Admin will review it soon.");
-          else toast.error("Failed to send report.");
+          if (res.ok) toast.success("Thank you for your report! Admin will check it soon.");
+          else toast.error("Failed to submit report.");
       } catch (e) {
           console.error(e);
       }
@@ -233,7 +235,7 @@ const WatchPage = () => {
             </button>
 
             <button 
-                onClick={handleReportVideo}
+                onClick={handleReportClick}
                 className="flex items-center gap-2 bg-transparent hover:bg-yellow-900/30 text-yellow-500 border border-yellow-600/50 px-4 py-2 rounded-lg font-bold transition ml-auto"
             >
                 <ExclamationCircleOutlined /> Report
@@ -331,6 +333,11 @@ const WatchPage = () => {
         </div>
 
       </div>
+        <ReportModal 
+            isOpen={showReportModal}
+            onClose={() => setShowReportModal(false)}
+            onSubmit={handleSubmitReport}
+        />
     </div>
   );
 };
