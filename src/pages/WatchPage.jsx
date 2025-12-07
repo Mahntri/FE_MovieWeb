@@ -222,7 +222,7 @@ const WatchPage = () => {
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition border border-gray-600
                     ${isFavorite ? 'bg-red-600 text-white border-red-600' : 'bg-transparent hover:bg-gray-700'}`}
             >
-                {isFavorite ? <HeartFilled /> : <HeartOutlined />} Add to Watchlist
+                {isFavorite ? <HeartFilled /> : <HeartOutlined />} Watchlist
             </button>
 
             <button 

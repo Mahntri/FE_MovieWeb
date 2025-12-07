@@ -131,7 +131,7 @@ const Header = () => {
                         <div className="relative" ref={searchRef}>
                             <div className={`flex items-center rounded-full px-4 py-2 border transition-all duration-300 w-64 focus-within:w-72 focus-within:border-red-600 ${isScrolled ? 'bg-gray-900 border-gray-700' : 'bg-black/40 border-white/20'}`}>
                                 <FaSearch className="text-gray-400 mr-3 text-sm" />
-                                <input type="text" placeholder="Titles, people, genres..." className="bg-transparent border-none outline-none text-white text-sm w-full placeholder-gray-400" value={keyword} onChange={(e) => setKeyword(e.target.value)} onFocus={() => keyword.length > 1 && setShowSearch(true)} onKeyDown={handleKeyDown} />
+                                <input type="text" placeholder="Search movie, serie" className="bg-transparent border-none outline-none text-white text-sm w-full placeholder-gray-400" value={keyword} onChange={(e) => setKeyword(e.target.value)} onFocus={() => keyword.length > 1 && setShowSearch(true)} onKeyDown={handleKeyDown} />
                             </div>
                             {showSearch && searchResults.length > 0 && (
                                 <div className="absolute top-full right-0 mt-3 w-80 bg-[#1a1a1a] rounded-xl shadow-2xl border border-gray-700 overflow-hidden z-50">
